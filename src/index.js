@@ -16,3 +16,4 @@ app.listen(port, () => {
 
 app.use(express.json());
 app.use("/users", require("./routes/users"));
+app.use("/payments", require("./routes/payments"));
