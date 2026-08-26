@@ -19,7 +19,9 @@ app.listen(port, () => {
 	console.log(`Server is running on port ${port}`);
 });
 
+app.use(express.json());
 app.use("/users", require("./routes/users"));
+app.use("/payments", require("./routes/payments"));
 app.use("/classes", require("./routes/classes"));
 app.use("/enrollments", require("./routes/ClassEnrollment"));
 app.use("/attendance", require("./routes/attendance"));
