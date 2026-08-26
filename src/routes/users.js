@@ -1,23 +1,28 @@
 const express = require("express");
-
-const {
-  createUser,
-  getAllUsers,
-  getUserById,
-  updateUserById,
-  deleteUserById,
-} = require("../controllers/users");
-
 const router = express.Router();
 
-router.post("/create", createUser);
+const {
+  register,
+  login,
+  getProfile,
+} = require("../controllers/users");
 
-router.get("/", getAllUsers);
+const auth = require("../middleware/auth");
+const authorizeRoles = require("../middleware/roles");
 
-router.get("/:id", getUserById);
+router.post("/register", register);
+router.post("/login", login);
+router.get("/profile", auth, getProfile);
 
-router.put("/:id", updateUserById);
-
-router.delete("/:id", deleteUserById);
+router.get(
+  "/admin-test",
+  auth,
+  authorizeRoles("Admin"),
+  (req, res) => {
+    res.status(200).json({
+      message: "Welcome Admin",
+    });
+  }
+);
 
 module.exports = router;
