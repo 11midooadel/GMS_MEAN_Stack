@@ -1,3 +1,14 @@
+<<<<<<< HEAD
+const express = require('express');
+const router = express.Router();
+const usersController = require('../controllers/users');
+
+router.post('/', usersController.createUser);
+router.get('/', usersController.getAllUsers);
+router.get('/:id', usersController.getUserById);
+router.put('/:id', usersController.updateUser);
+router.delete('/:id', usersController.deleteUser);
+=======
 const express = require("express");
 const router = express.Router();
 
@@ -24,5 +35,6 @@ router.get(
     });
   }
 );
+>>>>>>> origin/main
 
 module.exports = router;
