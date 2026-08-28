@@ -17,7 +17,7 @@ router.get("/profile", auth, getProfile);
 router.get(
   "/admin-test",
   auth,
-  authorizeRoles("Admin"),
+  authorizeRoles("Super Admin", "Admin"),
   (req, res) => {
     res.status(200).json({
       message: "Welcome Admin",
