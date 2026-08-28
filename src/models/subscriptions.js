@@ -13,11 +13,7 @@ const SubscriptionSchema = new mongoose.Schema({
 	},
 	paymentId: {
 		type: mongoose.Schema.Types.ObjectId,
-<<<<<<< HEAD
-		ref: 'Payment' // Links to the payment receipt/transaction details
-=======
 		ref: 'Payment' // References the Payment model to the payment receipt/transaction details
->>>>>>> origin/main
 	},
 	startDate: {
 		type: Date,
