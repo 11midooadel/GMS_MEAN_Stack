@@ -14,12 +14,12 @@ const enrollInClass = async (req, res) => {
             return res.status(400).json({ message: "Class is full" });
         }
         // Check if member is already enrolled
-        const existingEnrollment = await ClassEnrollment.findOne({ member: req.User.id, class: req.params.classId });
+        const existingEnrollment = await ClassEnrollment.findOne({ member: req.user.userId, class: req.params.classId });
         if (existingEnrollment) {
             return res.status(400).json({ message: "You are already enrolled in this class" });
         }
 
-        const enrollment = await ClassEnrollment.create({ member: req.User.id, class: req.params.classId });
+        const enrollment = await ClassEnrollment.create({ member: req.user.userId, class: req.params.classId });
         res.status(201).json({ message: "Enrolled in class successfully", enrollment });
     } catch (error) {
         res.status(500).json({ message: "Error enrolling in class", error: error.message });
@@ -29,7 +29,7 @@ const enrollInClass = async (req, res) => {
 // Leave Class (Member)
 const leaveClass = async (req, res) => {
     try {
-        const enrollment = await ClassEnrollment.findOneAndDelete({ member: req.User.id, class: req.params.classId });
+        const enrollment = await ClassEnrollment.findOneAndDelete({ member: req.user.userId, class: req.params.classId });
         if (!enrollment) {
             return res.status(404).json({ message: "You are not enrolled in this class" });
         }
@@ -39,10 +39,10 @@ const leaveClass = async (req, res) => {
     }
 };
 
-// Get Member Classes (Member & admin)
-const getMemberClasses = async (req, res) => { // What classes did THIS member join?
+// Get Member Classes (Member) // What classes did THIS member join?
+const getMemberClasses = async (req, res) => {
     try {
-        const enrollments = await ClassEnrollment.find({ member: req.User.id }).populate({ path: "class", populate: { path: "trainer", select: "name email" } });
+        const enrollments = await ClassEnrollment.find({ member: req.user.userId }).populate({ path: "class", populate: { path: "trainer", select: "name email" } });
         res.status(200).json({ classes: enrollments });
     } catch (error) {
         res.status(500).json({
@@ -52,7 +52,7 @@ const getMemberClasses = async (req, res) => { // What classes did THIS member j
     }
 };
 
-// Get Class Members(Trainer & member & admin) Who joined THIS class?
+// Get Class Members(Trainer & admin) Who joined THIS class?
 const getClassMembers = async (req, res) => {
     try {
         const classData = await Class.findById(req.params.classId);
@@ -60,7 +60,7 @@ const getClassMembers = async (req, res) => {
             return res.status(404).json({ message: "Class not found" });
         }
         // Make sure the logged-in trainer owns this class
-        if (classData.trainer.toString() !== req.user.id.toString()) {
+        if (req.user.role !== "Admin" && classData.trainer.toString() !== req.user.userId) {
             return res.status(403).json({ message: "You are not the trainer of this class" });
         }
 
@@ -72,8 +72,8 @@ const getClassMembers = async (req, res) => {
 };
 
 module.exports = {
-  enrollInClass,
-  leaveClass,
-  getMemberClasses,
-  getClassMembers
+    enrollInClass,
+    leaveClass,
+    getMemberClasses,
+    getClassMembers
 };

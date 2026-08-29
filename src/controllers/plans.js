@@ -1,6 +1,6 @@
 const Plan = require('../models/plans');
 
-exports.createPlan = async (req, res, next) => {
+const createPlan = async (req, res, next) => {
 	try {
 		const plan = await Plan.create(req.body);
 		res.status(201).json({ message: 'Plan created successfully', data: plan });
@@ -9,7 +9,7 @@ exports.createPlan = async (req, res, next) => {
 	}
 };
 
-exports.getAllPlans = async (req, res, next) => {
+const getAllPlans = async (req, res, next) => {
 	try {
 		// By default, only return active plans. Admins might pass a query like ?all=true
 		const query = req.query.all ? {} : { isActive: true };
@@ -20,7 +20,7 @@ exports.getAllPlans = async (req, res, next) => {
 	}
 };
 
-exports.getPlanById = async (req, res, next) => {
+const getPlanById = async (req, res, next) => {
 	try {
 		const plan = await Plan.findById(req.params.id);
 		if (!plan) return res.status(404).json({ message: 'Plan not found' });
@@ -30,7 +30,7 @@ exports.getPlanById = async (req, res, next) => {
 	}
 };
 
-exports.updatePlan = async (req, res, next) => {
+const updatePlan = async (req, res, next) => {
 	try {
 		const plan = await Plan.findByIdAndUpdate(req.params.id, req.body, {
 			new: true, // Returns the updated document
@@ -43,7 +43,7 @@ exports.updatePlan = async (req, res, next) => {
 	}
 };
 
-exports.disablePlan = async (req, res, next) => {
+const disablePlan = async (req, res, next) => {
 	try {
 		// Disabling a plan: sets isActive to false instead of removing it from the database
 		const plan = await Plan.findByIdAndUpdate(req.params.id, { isActive: false }, { new: true });
@@ -54,7 +54,7 @@ exports.disablePlan = async (req, res, next) => {
 	}
 };
 
-exports.enablePlan = async (req, res, next) => {
+const enablePlan = async (req, res, next) => {
 	try {
 		const plan = await Plan.findByIdAndUpdate(req.params.id, { isActive: true }, { new: true });
 		if (!plan) return res.status(404).json({ message: 'Plan not found' });
@@ -64,7 +64,7 @@ exports.enablePlan = async (req, res, next) => {
 	}
 };
 
-exports.deletePlan = async (req, res, next) => {
+const deletePlan = async (req, res, next) => {
 	try {
 		const plan = await Plan.findByIdAndDelete(req.params.id);
 		if (!plan) return res.status(404).json({ message: 'Plan not found' });
@@ -72,4 +72,14 @@ exports.deletePlan = async (req, res, next) => {
 	} catch (error) {
 		res.status(500).json({ message: error.message });
 	}
+};
+
+module.exports = {
+    createPlan,
+    getAllPlans,
+    getPlanById,
+    updatePlan,
+    disablePlan,
+    enablePlan,
+	deletePlan,
 };

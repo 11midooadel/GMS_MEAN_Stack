@@ -1,9 +1,8 @@
 const Attendance = require("../models/attendance");
 
-// Check In
 const checkIn = async (req, res) => {
     try {
-        const userId = req.user.id;
+        const userId = req.user.userId;
         const activeAttendance = await Attendance.findOne({ user: userId, checkOut: null });
         if (activeAttendance) {
             return res.status(400).json({ message: "You are already checked in" });
@@ -17,10 +16,9 @@ const checkIn = async (req, res) => {
     }
 };
 
-// Check Out
 const checkOut = async (req, res) => {
     try {
-        const userId = req.user.id;
+        const userId = req.user.userId;
         const attendance = await Attendance.findOne({ user: userId, checkOut: null });
 
         if (!attendance) {
@@ -36,10 +34,9 @@ const checkOut = async (req, res) => {
     }
 };
 
-// Get My Attendance
 const getMyAttendance = async (req, res) => {
     try {
-        const userId = req.user.id;
+        const userId = req.user.userId;
         const attendance = await Attendance.find({ user: userId }).sort({ checkIn: -1 });
         res.status(200).json({ attendance });
     } catch (error) {
@@ -47,7 +44,6 @@ const getMyAttendance = async (req, res) => {
     }
 };
 
-// Get Attendance By User
 const getAttendanceByUser = async (req, res) => {
     try {
         const attendance = await Attendance.find({user: req.params.userId}).sort({ checkIn: -1 });
