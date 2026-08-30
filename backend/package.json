@@ -16,7 +16,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+		"install-all": "npm install && cd ../frontend && npm install"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
