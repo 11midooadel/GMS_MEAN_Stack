@@ -1,7 +1,7 @@
 const Subscription = require('../models/subscriptions');
 const Plan = require('../models/plans');
 
-exports.createSubscription = async (req, res, next) => {
+const createSubscription = async (req, res, next) => {
 	try {
 		// 1. Validate the plan exists
 		const plan = await Plan.findById(req.body.planId);
@@ -17,20 +17,20 @@ exports.createSubscription = async (req, res, next) => {
 	}
 };
 
-exports.getMemberSubscription = async (req, res, next) => {
+const getMemberSubscription = async (req, res, next) => {
 	try {
 		// Find all subscriptions for a specific member, sort by most recent first
-		const subscriptions = await Subscription.find({ memberId: req.params.memberId })
-			.populate('planId', 'name features durationInDays') // Joins the plan details
-			.sort({ createdAt: -1 });
-
+		if (req.user.role === "Member" && req.params.memberId !== req.user.userId.toString()) {
+			return res.status(403).json({ message: "You can only view your own subscriptions" });
+		}
+		const subscriptions = await Subscription.find({ memberId: req.params.memberId }).populate('planId', 'name features durationInDays') // Joins the plan details.sort({ createdAt: -1 });
 		res.status(200).json({ data: subscriptions });
 	} catch (error) {
 		res.status(400).json({ message: error.message });
 	}
 };
 
-exports.updateSubscription = async (req, res, next) => {
+const updateSubscription = async (req, res, next) => {
 	try {
 		const subscription = await Subscription.findByIdAndUpdate(req.params.id, req.body, {
 			new: true, runValidators: true
@@ -42,14 +42,16 @@ exports.updateSubscription = async (req, res, next) => {
 	}
 };
 
-exports.cancelSubscription = async (req, res, next) => {
+const cancelSubscription = async (req, res, next) => {
 	try {
-		const subscription = await Subscription.findByIdAndUpdate(
-			req.params.id,
+		const subscription = await Subscription.findByIdAndUpdate(req.params.id,
 			{ status: 'Cancelled', endDate: Date.now() }, // Instantly expires it
 			{ new: true }
 		);
 		if (!subscription) return res.status(404).json({ message: 'Subscription not found' });
+		if (req.user.role === "Member" && subscription.memberId.toString() !== req.user.userId.toString()) {
+			return res.status(403).json({ message: "You can only cancel your own subscription" });
+		}
 		res.status(200).json({ message: 'Subscription cancelled', data: subscription });
 	} catch (error) {
 		res.status(400).json({ message: error.message });
@@ -58,10 +60,14 @@ exports.cancelSubscription = async (req, res, next) => {
 
 // REMINDER: We need to discuss how to handle frozen subscriptions.
 
-exports.checkSubscriptionStatus = async (req, res, next) => {
+const checkSubscriptionStatus = async (req, res, next) => {
 	try {
 		const subscription = await Subscription.findById(req.params.id);
 		if (!subscription) return res.status(404).json({ message: 'Subscription not found' });
+
+		if (req.user.role === "Member" && subscription.memberId.toString() !== req.user.userId.toString()) {
+			return res.status(403).json({ message: "You can only check your own subscription" });
+		}
 
 		// If endDate has passed, automatically update status to 'Expired'
 		let currentStatus = subscription.status;
@@ -77,11 +83,14 @@ exports.checkSubscriptionStatus = async (req, res, next) => {
 	}
 };
 
-exports.checkSubscriptionExpiration = async (req, res, next) => {
+const checkSubscriptionExpiration = async (req, res, next) => {
 	try {
 		const subscription = await Subscription.findById(req.params.id);
 		if (!subscription) return res.status(404).json({ message: 'Subscription not found' });
 
+		if (req.user.role === "Member" && subscription.memberId.toString() !== req.user.userId.toString()) {
+			return res.status(403).json({ message: "You can only check your own subscription" });
+		}
 		// Calculate days remaining
 		const timeDiff = subscription.endDate.getTime() - Date.now();
 		const daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24)); // Convert ms to days
@@ -94,4 +103,13 @@ exports.checkSubscriptionExpiration = async (req, res, next) => {
 	} catch (error) {
 		res.status(400).json({ message: error.message });
 	}
+};
+
+module.exports = {
+	createSubscription,
+	getMemberSubscription,
+	updateSubscription,
+	cancelSubscription,
+	checkSubscriptionStatus,
+	checkSubscriptionExpiration,
 };
