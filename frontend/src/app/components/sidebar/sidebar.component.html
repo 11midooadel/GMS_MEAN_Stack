@@ -1,0 +1,29 @@
+<aside class="sidebar">
+  <div class="sidebar__brand">
+    <div class="sidebar__logo">
+      <mat-icon>bolt</mat-icon>
+    </div>
+    <div class="sidebar__brand-text">
+      <span class="sidebar__name">GMS</span>
+      <span class="sidebar__tag">Gym Manager</span>
+    </div>
+  </div>
+
+  <nav class="sidebar__nav">
+    <a
+      *ngFor="let item of items"
+      class="sidebar__link"
+      [routerLink]="item.route"
+      routerLinkActive="is-active"
+      [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }"
+      (click)="navigate.emit()">
+      <mat-icon>{{ item.icon }}</mat-icon>
+      <span>{{ item.label }}</span>
+    </a>
+  </nav>
+
+  <div class="sidebar__promo">
+    <mat-icon>rocket_launch</mat-icon>
+    <p>Track workouts, stay consistent, become your best self.</p>
+  </div>
+</aside>
