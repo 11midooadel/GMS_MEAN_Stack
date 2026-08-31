@@ -1,7 +1,6 @@
 const ClassEnrollment = require("../models/ClassEnrollment");
 const Class = require("../models/Classes");
 
-// Enroll Member in Class (Member)
 const enrollInClass = async (req, res) => {
     try {
         const classData = await Class.findById(req.params.classId);
@@ -26,7 +25,6 @@ const enrollInClass = async (req, res) => {
     }
 };
 
-// Leave Class (Member)
 const leaveClass = async (req, res) => {
     try {
         const enrollment = await ClassEnrollment.findOneAndDelete({ member: req.user.userId, class: req.params.classId });
@@ -59,8 +57,8 @@ const getClassMembers = async (req, res) => {
         if (!classData) {
             return res.status(404).json({ message: "Class not found" });
         }
-        // Make sure the logged-in trainer owns this class
-        if (req.user.role !== "Admin" && classData.trainer.toString() !== req.user.userId) {
+        
+        if (req.user.role !== "Admin" && req.user.role !== "Super Admin" && classData.trainer.toString() !== req.user.userId) {
             return res.status(403).json({ message: "You are not the trainer of this class" });
         }
 

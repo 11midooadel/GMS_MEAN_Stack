@@ -160,9 +160,23 @@ const getUserById = async (req, res) => {
 // Update User
 const updateUser = async (req, res) => {
   try {
+    if (req.user.role !== "Admin" && req.user.role !== "Super Admin" && req.user.userId.toString() !== req.params.id) {
+      return res.status(403).json({ message: "Access denied" });
+    }
+
+    const updates = {};
+    if (req.body.name !== undefined) updates.name = req.body.name;
+    if (req.body.email !== undefined) updates.email = req.body.email;
+    if (req.body.password !== undefined) updates.password = await bcrypt.hash(req.body.password, 10);
+
+    if (req.user.role === "Admin" || req.user.role === "Super Admin") {
+      if (req.body.role !== undefined) updates.role = req.body.role;
+      if (req.body.assignedTrainer !== undefined) updates.assignedTrainer = req.body.assignedTrainer;
+    }
+
     const user = await User.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      updates,
       { new: true, runValidators: true }
     ).select('-password');
 
@@ -176,6 +190,9 @@ const updateUser = async (req, res) => {
 // Delete User
 const deleteUser = async (req, res) => {
   try {
+    if (req.user.role !== "Admin" && req.user.role !== "Super Admin" && req.user.userId.toString() !== req.params.id) {
+      return res.status(403).json({ message: "Access denied" });
+    }
     const user = await User.findByIdAndDelete(req.params.id);
     if (!user) return res.status(404).json({ message: 'User not found' });
     res.status(200).json({ message: 'User deleted successfully' });

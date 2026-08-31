@@ -21,9 +21,8 @@ app.use("/enrollments", require("./routes/ClassEnrollment"));
 app.use("/attendance", require("./routes/attendance"));
 app.use("/plans", require("./routes/plans"));
 app.use("/subscriptions", require("./routes/subscriptions"));
-// app.use("/members", require("./routes/members"));
-// app.use("/trainers", require("./routes/trainers"));
 app.use("/healthRecord", require("./routes/healthRecord"));
+app.use("/workoutPlans", require("./routes/workoutPlans"));
 
 // 4. Database Connection & Server Initialization
 mongoose
