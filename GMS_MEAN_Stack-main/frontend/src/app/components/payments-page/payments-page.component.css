@@ -1,0 +1,4 @@
+.pay__head { margin-bottom: 22px; }
+.pay__loading { display: grid; place-items: center; padding: 30px; }
+.pay__table { width: 100%; background: transparent; }
+table.mat-mdc-table { box-shadow: none; }

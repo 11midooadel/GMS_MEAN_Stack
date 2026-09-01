@@ -1,0 +1,11 @@
+.pr__head { margin-bottom: 22px; }
+.pr__grid { display: grid; grid-template-columns: 300px 1fr; gap: 20px; }
+.pr__summary { text-align: center; }
+.pr__summary h3 { margin: 14px 0 2px; }
+.pr__avatar {
+  width: 80px; height: 80px; border-radius: 50%; display: inline-grid; place-items: center;
+  color: #fff; font-size: 1.6rem; font-weight: 700;
+  background: linear-gradient(135deg, var(--gms-primary), var(--gms-primary-dark));
+}
+.pr__form { display: flex; flex-direction: column; }
+@media (max-width: 800px) { .pr__grid { grid-template-columns: 1fr; } }

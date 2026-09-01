@@ -1,0 +1,26 @@
+.layout {
+  height: 100vh;
+  background: var(--gms-bg-gradient);
+}
+
+.layout__sidenav {
+  width: var(--gms-sidebar-w);
+  border: none;
+  background: transparent;
+  padding: 0;
+}
+
+.layout__content {
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+}
+
+.layout__main {
+  padding: 24px 28px 40px;
+  overflow-y: auto;
+}
+
+@media (max-width: 599px) {
+  .layout__main { padding: 16px; }
+}

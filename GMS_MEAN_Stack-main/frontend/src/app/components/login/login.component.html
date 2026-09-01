@@ -1,0 +1,50 @@
+<div class="auth">
+  <!-- Hero panel (from the reference design) -->
+  <section class="auth__hero">
+    <div class="auth__hero-badge"><mat-icon>bolt</mat-icon> GMS</div>
+    <h1>Your Fitness<br />Journey Starts Here</h1>
+    <p>Track workouts, stay consistent and become your best self.</p>
+    <div class="auth__hero-stat">
+      <mat-icon>group</mat-icon>
+      <span>Join over <strong>2M+</strong> members</span>
+    </div>
+  </section>
+
+  <!-- Form panel -->
+  <section class="auth__panel">
+    <div class="auth__form-wrap">
+      <h2>Welcome back 👋</h2>
+      <p class="gms-muted">Log in to your account to continue.</p>
+
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <mat-form-field appearance="outline" class="auth__field">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" formControlName="email" placeholder="you@email.com" />
+          <mat-icon matSuffix>mail_outline</mat-icon>
+          <mat-error *ngIf="form.controls.email.hasError('required')">Email is required</mat-error>
+          <mat-error *ngIf="form.controls.email.hasError('email')">Enter a valid email</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="auth__field">
+          <mat-label>Password</mat-label>
+          <input matInput type="password" formControlName="password" />
+          <mat-icon matSuffix>lock_outline</mat-icon>
+          <mat-error *ngIf="form.controls.password.hasError('required')">Password is required</mat-error>
+          <mat-error *ngIf="form.controls.password.hasError('minlength')">At least 6 characters</mat-error>
+        </mat-form-field>
+
+        <button
+          mat-flat-button color="primary"
+          class="gms-pill auth__submit"
+          [disabled]="loading">
+          <mat-icon *ngIf="!loading">login</mat-icon>
+          {{ loading ? 'Signing in…' : 'Get Started' }}
+        </button>
+      </form>
+
+      <p class="auth__switch">
+        New here? <a routerLink="/auth/register">Create an account</a>
+      </p>
+    </div>
+  </section>
+</div>

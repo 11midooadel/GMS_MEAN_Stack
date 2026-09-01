@@ -1,0 +1,30 @@
+<header class="pl__head">
+  <div>
+    <h1 class="gms-page-title">Membership Plans</h1>
+    <p class="gms-page-subtitle">Choose the plan that fits your goals.</p>
+  </div>
+</header>
+
+<div *ngIf="loading" class="pl__loading"><mat-spinner diameter="40"></mat-spinner></div>
+
+<div class="pl__grid" *ngIf="!loading">
+  <article class="gms-card pl__card" *ngFor="let p of plans" [class.pl__card--off]="!p.isActive">
+    <div class="pl__card-top">
+      <h3>{{ p.name }}</h3>
+      <span class="gms-chip" [class.is-active]="p.isActive" [class.is-expired]="!p.isActive">
+        {{ p.isActive ? 'Active' : 'Disabled' }}
+      </span>
+    </div>
+    <div class="pl__price"><strong>{{ p.price | currency }}</strong><span>/ {{ p.durationInDays }} days</span></div>
+    <p class="gms-muted">{{ p.description }}</p>
+    <ul class="pl__features">
+      <li *ngFor="let f of p.features"><mat-icon>check_circle</mat-icon> {{ f }}</li>
+    </ul>
+    <div class="pl__actions" *ngIf="isAdmin">
+      <button mat-stroked-button class="gms-pill" *ngIf="p.isActive" (click)="disable(p)">Disable</button>
+      <button mat-flat-button color="primary" class="gms-pill" *ngIf="!p.isActive" (click)="enable(p)">Enable</button>
+    </div>
+  </article>
+</div>
+
+<p *ngIf="!loading && !plans.length" class="gms-muted pl__empty">No plans available.</p>
