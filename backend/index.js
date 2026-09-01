@@ -2,6 +2,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv");
+const dns = require("dns");
+
+dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 // 1. Load environment variables
 dotenv.config({ path: "./.env" });
@@ -12,6 +15,11 @@ const PORT = process.env.PORT || 5000;
 // 2. Global Middleware
 app.use(cors()); // Allows Angular frontend to make requests
 app.use(express.json()); // Parse JSON request bodies
+
+app.use((req, res, next) => {
+  console.log("REQUEST:", req.method, req.originalUrl);
+  next();
+});
 
 // 3. API Routes
 app.use("/users", require("./routes/users"));
@@ -26,14 +34,14 @@ app.use("/workoutPlans", require("./routes/workoutPlans"));
 
 // 4. Database Connection & Server Initialization
 mongoose
-	.connect(process.env.MONGO_URI)
-	.then(() => {
-		console.log("Connected to MongoDB");
-		app.listen(PORT, () => {
-			console.log(`Server is running on port ${PORT}`);
-		});
-	})
-	.catch((err) => {
-		console.error("MongoDB connection failed:", err.message);
-		process.exit(1); // Exit process with failure
-	});
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("Connected to MongoDB");
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error("MongoDB connection failed:", err.message);
+    process.exit(1);
+  });
