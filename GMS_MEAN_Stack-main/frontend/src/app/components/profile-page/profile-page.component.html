@@ -1,0 +1,34 @@
+<header class="pr__head">
+  <h1 class="gms-page-title">My Profile</h1>
+  <p class="gms-page-subtitle">Manage your account details.</p>
+</header>
+
+<div class="pr__grid">
+  <section class="gms-card pr__summary">
+    <span class="pr__avatar">{{ initials }}</span>
+    <h3>{{ me?.name }}</h3>
+    <p class="gms-muted">{{ me?.email }}</p>
+    <span class="gms-chip is-active">{{ me?.role }}</span>
+  </section>
+
+  <section class="gms-card">
+    <h3>Edit details</h3>
+    <form [formGroup]="form" (ngSubmit)="save()" class="pr__form">
+      <mat-form-field appearance="outline">
+        <mat-label>Full name</mat-label>
+        <input matInput formControlName="name" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>New password (optional)</mat-label>
+        <input matInput type="password" formControlName="password" />
+      </mat-form-field>
+      <button mat-flat-button color="primary" class="gms-pill" [disabled]="saving">
+        {{ saving ? 'Saving…' : 'Save changes' }}
+      </button>
+    </form>
+  </section>
+</div>

@@ -1,0 +1,5 @@
+.att__head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 22px; flex-wrap: wrap; }
+.att__actions { display: flex; gap: 12px; }
+.att__loading { display: grid; place-items: center; padding: 30px; }
+.att__table { width: 100%; background: transparent; }
+table.mat-mdc-table { box-shadow: none; }

@@ -1,0 +1,52 @@
+<div class="auth">
+  <section class="auth__hero">
+    <div class="auth__hero-badge"><mat-icon>bolt</mat-icon> GMS</div>
+    <h1>Start your<br />transformation today</h1>
+    <p>Create an account and take the first step toward your goals.</p>
+    <div class="auth__hero-stat">
+      <mat-icon>verified</mat-icon>
+      <span>Free to get started</span>
+    </div>
+  </section>
+
+  <section class="auth__panel">
+    <div class="auth__form-wrap">
+      <h2>Create account</h2>
+      <p class="gms-muted">Join GMS in less than a minute.</p>
+
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <mat-form-field appearance="outline" class="auth__field">
+          <mat-label>Full name</mat-label>
+          <input matInput formControlName="name" />
+          <mat-icon matSuffix>person_outline</mat-icon>
+          <mat-error *ngIf="form.controls.name.hasError('required')">Name is required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="auth__field">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" formControlName="email" />
+          <mat-icon matSuffix>mail_outline</mat-icon>
+          <mat-error *ngIf="form.controls.email.hasError('required')">Email is required</mat-error>
+          <mat-error *ngIf="form.controls.email.hasError('email')">Enter a valid email</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="auth__field">
+          <mat-label>Password</mat-label>
+          <input matInput type="password" formControlName="password" />
+          <mat-icon matSuffix>lock_outline</mat-icon>
+          <mat-error *ngIf="form.controls.password.hasError('required')">Password is required</mat-error>
+          <mat-error *ngIf="form.controls.password.hasError('minlength')">At least 6 characters</mat-error>
+        </mat-form-field>
+
+        <button mat-flat-button color="primary" class="gms-pill auth__submit" [disabled]="loading">
+          <mat-icon *ngIf="!loading">person_add</mat-icon>
+          {{ loading ? 'Creating…' : 'Create account' }}
+        </button>
+      </form>
+
+      <p class="auth__switch">
+        Already have an account? <a routerLink="/auth/login">Log in</a>
+      </p>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,72 @@
+<div class="list-container">
+  <div class="list-header">
+    <div>
+      <h2>{{ pageTitle }}</h2>
+    </div>
+
+    <div class="header-actions">
+      <input
+        type="text"
+        placeholder="Search..."
+        [(ngModel)]="searchTerm"
+        (input)="filterList()"
+        class="search-box"
+      />
+      <!-- Add Button: Super Admin & Admin Only -->
+      <button *ngIf="canEdit" class="btn-primary" (click)="openAddModal()">
+        + Add {{ currentRoleFilter === 'trainer' ? 'Trainer' : (currentRoleFilter === 'member' ? 'Member' : 'User') }}
+      </button>
+    </div>
+  </div>
+
+  <table class="styled-table" *ngIf="!isLoading; else loadingTpl">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Phone</th>
+        <th *ngIf="canEdit">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of filteredUsers">
+        <td>{{ user.name }}</td>
+        <td>{{ user.email }}</td>
+        <td>
+          <!-- Editable Dropdown for Super Admin & Admin -->
+          <select 
+            *ngIf="canEdit; else readOnlyRole"
+            [ngModel]="user.role?.toLowerCase()" 
+            (ngModelChange)="onRoleSelectChange(user, $event)" 
+            class="role-dropdown"
+            [ngClass]="user.role?.toLowerCase()">
+            <option value="member">Member</option>
+            <option value="trainer">Trainer</option>
+            <option value="admin">Admin</option>
+            <option value="super_admin">Super Admin</option>
+          </select>
+
+          <!-- Read-only badge for Trainers and Members -->
+          <ng-template #readOnlyRole>
+            <span class="role-badge" [ngClass]="user.role?.toLowerCase()">{{ user.role }}</span>
+          </ng-template>
+        </td>
+        <td>{{ user.phone || 'N/A' }}</td>
+        
+        <!-- Actions column restricted to Super Admin & Admin -->
+        <td class="action-buttons" *ngIf="canEdit">
+          <button class="btn-edit" (click)="openEditModal(user)">Edit</button>
+          <button class="btn-delete" (click)="deleteUser(user._id)">Delete</button>
+        </td>
+      </tr>
+      <tr *ngIf="filteredUsers.length === 0">
+        <td [attr.colspan]="canEdit ? 5 : 4" class="no-data">No records found.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <ng-template #loadingTpl>
+    <p class="loading-state">Loading records...</p>
+  </ng-template>
+</div>

@@ -1,0 +1,43 @@
+<header class="list__head">
+  <div>
+    <h1 class="gms-page-title">Classes</h1>
+    <p class="gms-page-subtitle">Browse and join group training sessions.</p>
+  </div>
+  <button *ngIf="isTrainer" mat-flat-button color="primary" class="gms-pill" (click)="create()">
+    <mat-icon>add</mat-icon> New Class
+  </button>
+</header>
+
+<div *ngIf="loading" class="list__loading"><mat-spinner diameter="40"></mat-spinner></div>
+
+<div class="classes" *ngIf="!loading">
+  <article class="gms-card class-card" *ngFor="let c of classes">
+    <div class="class-card__top">
+      <span class="class-card__icon"><mat-icon>fitness_center</mat-icon></span>
+      <button *ngIf="canManage" mat-icon-button color="warn" (click)="remove(c)" matTooltip="Delete">
+        <mat-icon>delete_outline</mat-icon>
+      </button>
+    </div>
+
+    <h3 class="class-card__name">{{ c.name }}</h3>
+    <p class="class-card__desc gms-muted">{{ c.description || 'Group training session' }}</p>
+
+    <div class="class-card__meta">
+      <span><mat-icon>person</mat-icon> {{ trainerName(c) }}</span>
+      <span><mat-icon>schedule</mat-icon> {{ c.startTime }} · {{ c.duration }}m</span>
+      <span><mat-icon>event</mat-icon> {{ c.days.join(', ') }}</span>
+      <span><mat-icon>groups</mat-icon> {{ c.capacity }} spots</span>
+    </div>
+
+    <div class="class-card__foot" *ngIf="isMember">
+      <button *ngIf="!enrolledIds.has(c._id!)" mat-flat-button color="primary" class="gms-pill" (click)="enroll(c)">
+        Enroll
+      </button>
+      <button *ngIf="enrolledIds.has(c._id!)" mat-stroked-button class="gms-pill" (click)="leave(c)">
+        <mat-icon>check</mat-icon> Enrolled — Leave
+      </button>
+    </div>
+  </article>
+</div>
+
+<p *ngIf="!loading && !classes.length" class="gms-muted list__empty">No classes yet.</p>

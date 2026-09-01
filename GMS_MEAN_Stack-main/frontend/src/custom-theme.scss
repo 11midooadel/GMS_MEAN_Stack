@@ -1,0 +1,63 @@
+// Custom Angular Material theme — FitCore / GMS
+// Palette: dark, bold, orange-accented gym aesthetic.
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+// ---- Orange (primary) ----
+$gms-primary-map: (
+  50:  #fff2e8,
+  100: #ffdcc0,
+  200: #ffc394,
+  300: #ffaa68,
+  400: #ff8a3d,
+  500: #ff6a1a,
+  600: #f05e12,
+  700: #d94f0a,
+  800: #b84008,
+  900: #8f3105,
+  contrast: (
+    50:  #2b1200, 100: #2b1200, 200: #2b1200, 300: #2b1200,
+    400: #ffffff, 500: #ffffff, 600: #ffffff, 700: #ffffff,
+    800: #ffffff, 900: #ffffff,
+  )
+);
+
+// ---- Red (accent) ----
+$gms-accent-map: (
+  50:  #ffe9ea,
+  100: #ffc2c5,
+  200: #ff969c,
+  300: #ff6a72,
+  400: #ff4952,
+  500: #ff3d3d,
+  600: #f0352f,
+  700: #d92b26,
+  800: #b8211d,
+  900: #8f1613,
+  contrast: (
+    50:  #370a08, 100: #370a08, 200: #370a08, 300: #ffffff,
+    400: #ffffff, 500: #ffffff, 600: #ffffff, 700: #ffffff,
+    800: #ffffff, 900: #ffffff,
+  )
+);
+
+$gms-primary: mat.define-palette($gms-primary-map, 500, 300, 700);
+$gms-accent:  mat.define-palette($gms-accent-map, 500, 300, 700);
+$gms-warn:    mat.define-palette(mat.$red-palette);
+
+$gms-typography: mat.define-typography-config(
+  $font-family: 'Poppins, Roboto, "Helvetica Neue", sans-serif',
+);
+
+$gms-theme: mat.define-dark-theme((
+  color: (
+    primary: $gms-primary,
+    accent: $gms-accent,
+    warn: $gms-warn,
+  ),
+  typography: $gms-typography,
+  density: -3,
+));
+
+@include mat.all-component-themes($gms-theme);

@@ -1,0 +1,70 @@
+<div class="dashboard-page">
+<div class="header-section">
+  <h1>{{ isSuperAdmin ? 'Super Admin' : 'Admin' }} Dashboard</h1>
+  <p>System overview and user analytics</p>
+</div>
+
+  <div *ngIf="isLoading" class="loading-state">
+    <p>Loading dashboard metrics...</p>
+  </div>
+
+  <div *ngIf="!isLoading" class="metrics-grid">
+    <div class="metric-card">
+      <div class="card-icon blue">👥</div>
+      <div class="card-info">
+        <span class="card-title">Total Users</span>
+        <span class="metric-value">{{ totalUsers }}</span>
+      </div>
+    </div>
+
+    <div class="metric-card">
+      <div class="card-icon green">🏋️</div>
+      <div class="card-info">
+        <span class="card-title">Members</span>
+        <span class="metric-value">{{ totalMembers }}</span>
+      </div>
+    </div>
+
+    <div class="metric-card">
+      <div class="card-icon orange">🎯</div>
+      <div class="card-info">
+        <span class="card-title">Trainers</span>
+        <span class="metric-value">{{ totalTrainers }}</span>
+      </div>
+    </div>
+
+    <div class="metric-card">
+      <div class="card-icon purple">🛡️</div>
+      <div class="card-info">
+        <span class="card-title">Admins</span>
+        <span class="metric-value">{{ totalAdmins }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Users Section -->
+  <div *ngIf="!isLoading" class="recent-users-section">
+    <h2>Recent Registrations</h2>
+    <table class="styled-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Phone</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of recentUsers">
+          <td>{{ user.name || 'N/A' }}</td>
+          <td>{{ user.email }}</td>
+          <td><span class="role-badge" [ngClass]="user.role">{{ user.role }}</span></td>
+          <td>{{ user.phone || 'N/A' }}</td>
+        </tr>
+        <tr *ngIf="recentUsers.length === 0">
+          <td colspan="4" class="no-data">No users found.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
