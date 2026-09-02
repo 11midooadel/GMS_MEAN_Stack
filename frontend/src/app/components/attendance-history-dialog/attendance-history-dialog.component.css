@@ -1,0 +1,13 @@
+.hist__title {
+  font-size: 1.05rem !important;
+  margin: 0 !important;
+}
+.hist__content {
+  min-width: 340px;
+  max-width: 420px;
+  max-height: 360px;
+}
+.hist__loading { display: grid; place-items: center; padding: 30px; }
+.hist__empty { text-align: center; padding: 20px 0; }
+.hist__table { width: 100%; background: transparent; }
+table.mat-mdc-table { box-shadow: none; }

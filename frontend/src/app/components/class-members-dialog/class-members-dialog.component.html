@@ -1,0 +1,26 @@
+<h2 mat-dialog-title class="members__title">{{ data.className }} — Members</h2>
+
+<mat-dialog-content class="members__content">
+  <div *ngIf="loading" class="members__loading"><mat-spinner diameter="32"></mat-spinner></div>
+
+  <ul class="members__list" *ngIf="!loading && members.length">
+    <li class="members__item" *ngFor="let m of members">
+      <span class="members__avatar">{{ initials(m.name) }}</span>
+      <span class="members__info">
+        <span class="members__name">{{ m.name }}</span>
+        <span class="members__email">{{ m.email }}</span>
+      </span>
+      <button mat-icon-button (click)="createPlan(m)" matTooltip="Create workout plan">
+        <mat-icon>assignment_add</mat-icon>
+      </button>
+    </li>
+  </ul>
+
+  <p *ngIf="!loading && !members.length" class="gms-muted members__empty">
+    No members enrolled yet.
+  </p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-flat-button color="primary" class="gms-pill" mat-dialog-close>Close</button>
+</mat-dialog-actions>

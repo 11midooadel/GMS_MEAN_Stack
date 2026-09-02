@@ -10,7 +10,9 @@ import { NavItem, navForRole } from '../../core/nav/nav-items';
 export class SidebarComponent {
   @Output() navigate = new EventEmitter<void>();
 
-  items: NavItem[] = navForRole(this.auth.role);
-
   constructor(private auth: AuthService) {}
+
+  get items(): NavItem[] {
+    return navForRole(this.auth.role);
+  }
 }

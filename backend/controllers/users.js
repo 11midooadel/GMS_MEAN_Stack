@@ -232,6 +232,51 @@ const assignTrainer = async (req, res) => {
   }
 };
 
+// Get My Members (Trainer) — members currently assigned to the logged-in trainer
+const getMyMembers = async (req, res) => {
+  try {
+    const members = await User.find({ assignedTrainer: req.user.userId }).select('-password');
+    res.status(200).json(members);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// const testToken = async (req, res) => {
+//     try {
+//         const user = await User.findById(req.params.id);
+
+//         if (!user) {
+//             return res.status(404).json({ message: "User not found" });
+//         }
+
+//         const token = jwt.sign(
+//             {
+//                 userId: user._id,
+//                 role: user.role
+//             },
+//             process.env.JWT_SECRET || "gym-management-secret",
+//             { expiresIn: "1d" }
+//         );
+
+//         res.status(200).json({
+//             message: "Test token generated successfully",
+//             token,
+//             user: {
+//                 id: user._id,
+//                 name: user.name,
+//                 email: user.email,
+//                 role: user.role
+//             }
+//         });
+
+//     } catch (error) {
+//         res.status(500).json({
+//             message: "Error generating token",
+//             error: error.message
+//         });
+//     }
+// };
 
 
 module.exports = {
@@ -244,4 +289,6 @@ module.exports = {
   updateUser,
   deleteUser,
   assignTrainer,
+  getMyMembers,
+  // testToken,
 };

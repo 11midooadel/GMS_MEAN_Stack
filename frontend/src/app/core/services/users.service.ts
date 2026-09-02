@@ -27,4 +27,8 @@ export class UsersService {
   assignTrainer(memberId: string, trainerId: string): Observable<any> {
     return this.http.put(`${this.base}/assign-trainer`, { memberId, trainerId });
   }
+  /** The members currently assigned to the logged-in Trainer. */
+  getMyMembers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.base}/my-members`);
+  }
 }

@@ -1,0 +1,28 @@
+<header class="mm__head">
+  <h1 class="gms-page-title">My Members</h1>
+  <p class="gms-page-subtitle">Members assigned to you — check their health record, then create a workout plan.</p>
+</header>
+
+<div *ngIf="loading" class="mm__loading"><mat-spinner diameter="40"></mat-spinner></div>
+
+<div class="mm__grid" *ngIf="!loading">
+  <article class="gms-card mm__card" *ngFor="let m of members">
+    <span class="mm__avatar">{{ initials(m.name) }}</span>
+    <div class="mm__info">
+      <span class="mm__name">{{ m.name }}</span>
+      <span class="gms-muted mm__email">{{ m.email }}</span>
+    </div>
+    <div class="mm__actions">
+      <button mat-stroked-button class="gms-pill" (click)="viewHealth(m)">
+        <mat-icon>monitor_heart</mat-icon> Health Record
+      </button>
+      <button mat-flat-button color="primary" class="gms-pill" (click)="createPlan(m)">
+        <mat-icon>assignment_add</mat-icon> Create Plan
+      </button>
+    </div>
+  </article>
+</div>
+
+<p *ngIf="!loading && !members.length" class="gms-muted mm__empty">
+  No members are assigned to you yet.
+</p>

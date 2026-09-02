@@ -18,8 +18,14 @@ export const NAV_ITEMS: NavItem[] = [
   { label: 'Trainers', icon: 'sports', route: '/members/trainers',
     roles: ['Super Admin', 'Admin'] },
 
+  { label: 'My Members', icon: 'group', route: '/my-members',
+    roles: ['Trainer'] },
+
   { label: 'Classes', icon: 'fitness_center', route: '/classes',
     roles: ['Super Admin', 'Admin', 'Member', 'Trainer'] },
+
+  { label: 'My Classes', icon: 'event_available', route: '/classes/mine',
+    roles: ['Member'] },
 
   { label: 'Workout Plans', icon: 'assignment', route: '/workouts',
     roles: ['Super Admin', 'Admin', 'Member', 'Trainer'] },

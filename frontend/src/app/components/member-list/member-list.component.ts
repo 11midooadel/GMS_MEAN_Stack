@@ -4,6 +4,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { UsersService } from '../../core/services/users.service';
 import { Role, User } from '../../core/models/models';
 import { MemberFormComponent } from '../member-form/member-form.component';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { AttendanceHistoryDialogComponent } from '../attendance-history-dialog/attendance-history-dialog.component';
+import { HealthHistoryDialogComponent } from '../health-history-dialog/health-history-dialog.component';
 
 @Component({
   selector: 'app-member-list',
@@ -58,6 +61,20 @@ export class MemberListComponent implements OnInit {
         );
   }
 
+  viewAttendance(user: User): void {
+    this.dialog.open(AttendanceHistoryDialogComponent, {
+      width: '420px',
+      data: { userId: user._id!, userName: user.name },
+    });
+  }
+
+  viewHealth(user: User): void {
+    this.dialog.open(HealthHistoryDialogComponent, {
+      width: '440px',
+      data: { memberId: user._id!, memberName: user.name },
+    });
+  }
+
   openForm(user?: User): void {
     this.dialog
       .open(MemberFormComponent, {
@@ -69,7 +86,19 @@ export class MemberListComponent implements OnInit {
   }
 
   remove(user: User): void {
-    if (!confirm(`Delete ${user.name}?`)) return;
-    this.usersSvc.delete(user._id!).subscribe(() => this.load());
+    this.dialog
+      .open(ConfirmDialogComponent, {
+        width: '360px',
+        data: {
+          title: 'Delete user?',
+          message: `This will permanently delete ${user.name}'s account. This can't be undone.`,
+          confirmText: 'Delete',
+        },
+      })
+      .afterClosed()
+      .subscribe((confirmed) => {
+        if (!confirmed) return;
+        this.usersSvc.delete(user._id!).subscribe(() => this.load());
+      });
   }
 }

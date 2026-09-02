@@ -1,0 +1,50 @@
+.confirm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 8px 4px 4px;
+  min-width: 300px;
+  max-width: 360px;
+}
+
+.confirm__icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  margin-bottom: 14px;
+  background: var(--gms-primary-soft);
+  color: var(--gms-primary);
+}
+.confirm__icon--danger {
+  background: var(--gms-accent-soft);
+  color: var(--gms-accent);
+}
+.confirm__icon mat-icon { font-size: 26px !important; width: 26px !important; height: 26px !important; }
+
+.confirm__title {
+  margin: 0 0 6px !important;
+  font-size: 1.05rem !important;
+  font-weight: 600;
+}
+
+.confirm__message {
+  margin: 0 0 20px;
+  color: var(--gms-text-muted);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.confirm__actions {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  padding: 0 !important;
+}
+.confirm__actions button { flex: 1; }
+.confirm__cancel {
+  background: var(--gms-card-soft) !important;
+  color: var(--gms-text) !important;
+}

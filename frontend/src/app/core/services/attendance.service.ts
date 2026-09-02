@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Attendance } from '../models/models';
 
@@ -15,10 +15,16 @@ export class AttendanceService {
   checkOut(): Observable<any> {
     return this.http.get(`${this.base}/check-out`);
   }
+
+  /** Backend wraps the list in `{ attendance: [...] }` rather than returning it directly. */
   myAttendance(): Observable<Attendance[]> {
-    return this.http.get<Attendance[]>(`${this.base}/my-attendance`);
+    return this.http
+      .get<{ attendance: Attendance[] }>(`${this.base}/my-attendance`)
+      .pipe(map((res) => res.attendance));
   }
   byUser(userId: string): Observable<Attendance[]> {
-    return this.http.get<Attendance[]>(`${this.base}/user/${userId}`);
+    return this.http
+      .get<{ attendance: Attendance[] }>(`${this.base}/user/${userId}`)
+      .pipe(map((res) => res.attendance));
   }
 }

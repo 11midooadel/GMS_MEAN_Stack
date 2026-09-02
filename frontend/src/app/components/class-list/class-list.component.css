@@ -7,8 +7,31 @@
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
 }
-.class-card { display: flex; flex-direction: column; gap: 6px; }
+.class-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.class-card:hover {
+  transform: scale(1.03);
+  border-color: var(--gms-primary);
+  box-shadow: var(--gms-shadow), 0 0 26px rgba(255, 106, 26, 0.4);
+  z-index: 1;
+}
+
+/* Already-joined classes on the Browse page: locked/static, no hover reaction. */
+.class-card--frozen {
+  opacity: 0.72;
+}
+.class-card--frozen:hover {
+  transform: none;
+  border-color: var(--gms-border);
+  box-shadow: var(--gms-shadow-sm);
+  z-index: auto;
+}
 .class-card__top { display: flex; align-items: center; justify-content: space-between; }
+.class-card__owner-actions { display: flex; align-items: center; gap: 2px; }
 .class-card__icon {
   width: 40px; height: 40px; border-radius: 13px; display: grid; place-items: center;
   color: #fff; background: linear-gradient(135deg, var(--gms-primary), var(--gms-primary-dark));
@@ -21,3 +44,9 @@
 .class-card__meta mat-icon { font-size: 18px; width: 18px; height: 18px; color: var(--gms-primary); }
 .class-card__foot { margin-top: auto; }
 .class-card__foot button { width: 100%; }
+.class-card__locked {
+  width: 100%;
+  justify-content: center;
+  padding: 10px 0;
+  cursor: default;
+}

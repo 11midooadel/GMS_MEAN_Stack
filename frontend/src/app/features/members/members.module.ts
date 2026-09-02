@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '../../shared/shared.module';
 import { MemberListComponent } from '../../components/member-list/member-list.component';
 import { MemberFormComponent } from '../../components/member-form/member-form.component';
+import { AttendanceHistoryDialogComponent } from '../../components/attendance-history-dialog/attendance-history-dialog.component';
 
 const routes: Routes = [
   { path: '', component: MemberListComponent },
@@ -10,7 +11,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [MemberListComponent, MemberFormComponent],
+  declarations: [MemberListComponent, MemberFormComponent, AttendanceHistoryDialogComponent],
   imports: [SharedModule, RouterModule.forChild(routes)],
 })
 export class MembersModule {}

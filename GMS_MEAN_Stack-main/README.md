@@ -1,1 +1,0 @@
-# GMS_MEAN_Stack

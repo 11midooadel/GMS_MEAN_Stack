@@ -1,8 +1,0 @@
-.hl__head { margin-bottom: 22px; }
-.hl__grid { display: grid; grid-template-columns: 380px 1fr; gap: 20px; }
-.hl__form { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; }
-.hl__full { grid-column: span 2; }
-.hl__loading { display: grid; place-items: center; padding: 30px; }
-.hl__table { width: 100%; background: transparent; }
-table.mat-mdc-table { box-shadow: none; }
-@media (max-width: 900px) { .hl__grid { grid-template-columns: 1fr; } }

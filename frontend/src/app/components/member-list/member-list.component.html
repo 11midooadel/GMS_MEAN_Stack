@@ -45,6 +45,8 @@
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let u" class="list__actions">
+        <button mat-icon-button (click)="viewAttendance(u)" matTooltip="Attendance"><mat-icon>how_to_reg</mat-icon></button>
+        <button *ngIf="u.role === 'Member'" mat-icon-button (click)="viewHealth(u)" matTooltip="Health record"><mat-icon>monitor_heart</mat-icon></button>
         <button mat-icon-button (click)="openForm(u)" matTooltip="Edit"><mat-icon>edit</mat-icon></button>
         <button mat-icon-button color="warn" (click)="remove(u)" matTooltip="Delete"><mat-icon>delete_outline</mat-icon></button>
       </td>
