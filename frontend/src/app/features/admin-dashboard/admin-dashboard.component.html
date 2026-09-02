@@ -1,0 +1,633 @@
+<div class="admin-dashboard">
+
+  <!-- Header -->
+  <header class="dashboard-header">
+    <div>
+      <p class="eyebrow">Gym Management</p>
+      <h1>Welcome back, Martina 👋</h1>
+      <p class="subtitle">
+        Here's what's happening in your gym today.
+      </p>
+    </div>
+
+    <button class="primary-btn" routerLink="/members">
+      <span>+</span>
+      Add Member
+    </button>
+  </header>
+
+
+  <!-- Statistics -->
+  <section class="stats-grid">
+
+    <div class="stat-card">
+      <div class="stat-icon members-icon">👥</div>
+
+      <div class="stat-content">
+        <span class="stat-label">Total Members</span>
+        <strong class="stat-value">1,248</strong>
+        <span class="stat-change positive">+12% this month</span>
+      </div>
+    </div>
+
+
+    <div class="stat-card">
+      <div class="stat-icon trainers-icon">🏋️</div>
+
+      <div class="stat-content">
+        <span class="stat-label">Total Trainers</span>
+        <strong class="stat-value">24</strong>
+        <span class="stat-change positive">+3 this month</span>
+      </div>
+    </div>
+
+
+    <div class="stat-card">
+      <div class="stat-icon subscriptions-icon">📋</div>
+
+      <div class="stat-content">
+        <span class="stat-label">Active Subscriptions</span>
+        <strong class="stat-value">486</strong>
+        <span class="stat-change positive">+8.4%</span>
+      </div>
+    </div>
+
+
+    <div class="stat-card">
+      <div class="stat-icon revenue-icon">💰</div>
+
+      <div class="stat-content">
+        <span class="stat-label">Monthly Revenue</span>
+        <strong class="stat-value">$12,450</strong>
+        <span class="stat-change positive">+14.2%</span>
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- Main Row -->
+  <section class="content-grid">
+
+    <!-- Attendance -->
+    <div class="dashboard-card attendance-card">
+
+      <div class="card-header">
+        <div>
+          <h2>Today's Attendance</h2>
+          <p>Members checked in today</p>
+        </div>
+
+        <button class="view-all" routerLink="/attendance">
+          View details
+        </button>
+      </div>
+
+
+      <div class="attendance-content">
+
+        <div class="progress-ring">
+
+          <svg viewBox="0 0 120 120">
+
+            <circle
+              class="ring-track"
+              cx="60"
+              cy="60"
+              r="50">
+            </circle>
+
+            <circle
+              class="ring-value"
+              cx="60"
+              cy="60"
+              r="50">
+            </circle>
+
+          </svg>
+
+          <div class="progress-text">
+            <strong>78%</strong>
+            <span>Attendance</span>
+          </div>
+
+        </div>
+
+
+        <div class="attendance-stats">
+
+          <div>
+            <strong>342</strong>
+            <span>Checked In</span>
+          </div>
+
+          <div>
+            <strong>96</strong>
+            <span>Remaining</span>
+          </div>
+
+          <div>
+            <strong>438</strong>
+            <span>Total Members</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- Membership Overview -->
+    <div class="dashboard-card">
+
+      <div class="card-header">
+        <div>
+          <h2>Membership Overview</h2>
+          <p>Current subscription status</p>
+        </div>
+
+        <button class="view-all" routerLink="/subscriptions">
+          View all
+        </button>
+      </div>
+
+
+      <div class="membership-list">
+
+        <div class="membership-row">
+          <div>
+            <strong>Active</strong>
+            <small>Current subscriptions</small>
+          </div>
+
+          <span class="membership-number green-text">486</span>
+        </div>
+
+
+        <div class="membership-row">
+          <div>
+            <strong>Pending</strong>
+            <small>Waiting for activation</small>
+          </div>
+
+          <span class="membership-number orange-text">28</span>
+        </div>
+
+
+        <div class="membership-row">
+          <div>
+            <strong>Expired</strong>
+            <small>Need renewal</small>
+          </div>
+
+          <span class="membership-number red-text">54</span>
+        </div>
+
+
+        <div class="membership-row">
+          <div>
+            <strong>Cancelled</strong>
+            <small>Cancelled memberships</small>
+          </div>
+
+          <span class="membership-number gray-text">16</span>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- Quick Actions -->
+  <section class="dashboard-card quick-card">
+
+    <div class="card-header">
+      <div>
+        <h2>Quick Actions</h2>
+        <p>Manage your gym quickly</p>
+      </div>
+    </div>
+
+
+    <div class="quick-actions">
+
+      <a
+        class="quick-action"
+        routerLink="/members">
+
+        <span class="quick-icon purple">👤</span>
+
+        <span>
+          <strong>Add Member</strong>
+          <small>Create a new member</small>
+        </span>
+
+      </a>
+
+
+      <a
+        class="quick-action"
+        routerLink="/members">
+
+        <span class="quick-icon green">🏋️</span>
+
+        <span>
+          <strong>Manage Members</strong>
+          <small>Manage gym members and roles</small>
+        </span>
+
+      </a>
+
+
+      <a
+        class="quick-action"
+        routerLink="/payments">
+
+        <span class="quick-icon orange">💳</span>
+
+        <span>
+          <strong>New Payment</strong>
+          <small>Record a payment</small>
+        </span>
+
+      </a>
+
+
+      <a
+        class="quick-action"
+        routerLink="/classes">
+
+        <span class="quick-icon blue">📅</span>
+
+        <span>
+          <strong>Classes</strong>
+          <small>Manage gym classes</small>
+        </span>
+
+      </a>
+
+    </div>
+
+  </section>
+
+
+  <!-- Weekly Activity -->
+  <section class="dashboard-card weekly-card">
+
+    <div class="card-header">
+
+      <div>
+        <h2>Weekly Activity</h2>
+        <p>Gym activity during this week</p>
+      </div>
+
+      <span class="period">
+        This Week ▾
+      </span>
+
+    </div>
+
+
+    <div class="chart-area">
+
+      <div class="chart-y-axis">
+        <span>500</span>
+        <span>400</span>
+        <span>300</span>
+        <span>200</span>
+        <span>100</span>
+        <span>0</span>
+      </div>
+
+
+      <div class="chart">
+
+        <div class="chart-column">
+          <div class="bar" style="height: 52%"></div>
+          <span>Mon</span>
+        </div>
+
+        <div class="chart-column">
+          <div class="bar" style="height: 72%"></div>
+          <span>Tue</span>
+        </div>
+
+        <div class="chart-column">
+          <div class="bar active" style="height: 88%"></div>
+          <span>Wed</span>
+        </div>
+
+        <div class="chart-column">
+          <div class="bar" style="height: 61%"></div>
+          <span>Thu</span>
+        </div>
+
+        <div class="chart-column">
+          <div class="bar" style="height: 82%"></div>
+          <span>Fri</span>
+        </div>
+
+        <div class="chart-column">
+          <div class="bar" style="height: 68%"></div>
+          <span>Sat</span>
+        </div>
+
+        <div class="chart-column">
+          <div class="bar" style="height: 45%"></div>
+          <span>Sun</span>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- Bottom Grid -->
+  <section class="bottom-grid">
+
+    <!-- Upcoming Classes -->
+    <div class="dashboard-card">
+
+      <div class="card-header">
+
+        <div>
+          <h2>Upcoming Classes</h2>
+          <p>Today's and upcoming sessions</p>
+        </div>
+
+        <button class="view-all" routerLink="/classes">
+          View all
+        </button>
+
+      </div>
+
+
+      <div class="class-list">
+
+        <div class="class-item">
+
+          <span class="class-icon purple">🏋️</span>
+
+          <div>
+            <strong>Full Body Strength</strong>
+            <small>Today • 6:00 PM • Main Hall</small>
+          </div>
+
+          <span class="class-capacity">12 / 15</span>
+
+        </div>
+
+
+        <div class="class-item">
+
+          <span class="class-icon green">🔥</span>
+
+          <div>
+            <strong>HIIT Burn</strong>
+            <small>Today • 7:30 PM • Studio A</small>
+          </div>
+
+          <span class="class-capacity">18 / 20</span>
+
+        </div>
+
+
+        <div class="class-item">
+
+          <span class="class-icon orange">🏃</span>
+
+          <div>
+            <strong>Cardio Training</strong>
+            <small>Tomorrow • 5:00 PM • Cardio Zone</small>
+          </div>
+
+          <span class="class-capacity">10 / 15</span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- Recent Members -->
+    <div class="dashboard-card">
+
+      <div class="card-header">
+
+        <div>
+          <h2>Recent Members</h2>
+          <p>Recently registered members</p>
+        </div>
+
+        <button class="view-all" routerLink="/members">
+          View all
+        </button>
+
+      </div>
+
+
+      <div class="member-list">
+
+        <div class="member-item">
+
+          <span class="avatar purple">MA</span>
+
+          <div>
+            <strong>Mahmoud Ahmed</strong>
+            <small>Joined today</small>
+          </div>
+
+          <span class="member-status active">
+            Active
+          </span>
+
+        </div>
+
+
+        <div class="member-item">
+
+          <span class="avatar green">AM</span>
+
+          <div>
+            <strong>Ahmed Mohamed</strong>
+            <small>Joined yesterday</small>
+          </div>
+
+          <span class="member-status active">
+            Active
+          </span>
+
+        </div>
+
+
+        <div class="member-item">
+
+          <span class="avatar blue">YK</span>
+
+          <div>
+            <strong>Youssef Khaled</strong>
+            <small>Joined 2 days ago</small>
+          </div>
+
+          <span class="member-status pending">
+            Pending
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- Payments + Activity -->
+  <section class="bottom-grid">
+
+    <!-- Recent Payments -->
+    <div class="dashboard-card">
+
+      <div class="card-header">
+
+        <div>
+          <h2>Recent Payments</h2>
+          <p>Latest payment activity</p>
+        </div>
+
+        <button class="view-all" routerLink="/payments">
+          View all
+        </button>
+
+      </div>
+
+
+      <div class="payment-list">
+
+        <div class="payment-item">
+
+          <div class="payment-icon green">✓</div>
+
+          <div>
+            <strong>Mahmoud Ahmed</strong>
+            <small>Premium Plan • Today</small>
+          </div>
+
+          <strong class="payment-amount">
+            +$250
+          </strong>
+
+        </div>
+
+
+        <div class="payment-item">
+
+          <div class="payment-icon green">✓</div>
+
+          <div>
+            <strong>Ahmed Mohamed</strong>
+            <small>Monthly Plan • Today</small>
+          </div>
+
+          <strong class="payment-amount">
+            +$120
+          </strong>
+
+        </div>
+
+
+        <div class="payment-item">
+
+          <div class="payment-icon orange">!</div>
+
+          <div>
+            <strong>Youssef Khaled</strong>
+            <small>Payment pending</small>
+          </div>
+
+          <strong class="payment-pending">
+            Pending
+          </strong>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- Recent Activity -->
+    <div class="dashboard-card">
+
+      <div class="card-header">
+
+        <div>
+          <h2>Recent Activity</h2>
+          <p>Latest gym updates</p>
+        </div>
+
+      </div>
+
+
+      <div class="activity-list">
+
+        <div class="activity-item">
+
+          <span class="activity-avatar purple">👤</span>
+
+          <div>
+            <strong>New member registered</strong>
+            <small>Mahmoud Ahmed • 10 min ago</small>
+          </div>
+
+        </div>
+
+
+        <div class="activity-item">
+
+          <span class="activity-avatar green">✓</span>
+
+          <div>
+            <strong>Payment completed</strong>
+            <small>Premium subscription • 25 min ago</small>
+          </div>
+
+        </div>
+
+
+        <div class="activity-item">
+
+          <span class="activity-avatar orange">🏋️</span>
+
+          <div>
+            <strong>Trainer added</strong>
+            <small>Ahmed Mohamed • 1 hour ago</small>
+          </div>
+
+        </div>
+
+
+        <div class="activity-item">
+
+          <span class="activity-avatar blue">📅</span>
+
+          <div>
+            <strong>New class scheduled</strong>
+            <small>Full Body Strength • 2 hours ago</small>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</div>

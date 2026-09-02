@@ -47,8 +47,8 @@ export class AuthService {
   }
 
   get role(): Role | null {
-    return this.currentUser$.value?.role ?? null;
-  }
+  return this.currentUser$.value?.role ?? null;
+}
 
   get isLoggedIn(): boolean {
     return !!this.token;

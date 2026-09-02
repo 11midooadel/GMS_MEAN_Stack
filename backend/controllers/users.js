@@ -23,16 +23,22 @@ const isSuperOrAdmin = (role) => {
 const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
+
     if (!name || !email || !password) {
-      return res.status(400).json({ message: 'Name, email and password are required' });
+      return res.status(400).json({
+        message: "Name, email and password are required"
+      });
     }
 
     const existingUser = await User.findOne({ email: email.toLowerCase().trim() });
     if (existingUser) {
-      return res.status(400).json({ message: 'Email already exists' });
+      return res.status(400).json({
+        message: "Email already exists"
+      });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+
     const user = await User.create({
       name: name.trim(),
       email: email.toLowerCase().trim(),
@@ -84,6 +90,11 @@ const login = async (req, res) => {
         message: 'Invalid email or password',
       });
     }
+
+    // const normalizedRole =
+    //   user.role?.trim().toLowerCase() === "admin"
+    //     ? "Admin"
+    //     : user.role;
 
     const token = jwt.sign(
       {
@@ -147,8 +158,12 @@ const createUser = async (req, res) => {
 
     const existingUser = await User.findOne({ email: email.toLowerCase().trim() });
     if (existingUser) {
+      return res.status(400).json({
+        message: "Email already exists"
+      });
       return res.status(400).json({ message: 'Email already exists' });
     }
+
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = new User({
@@ -161,13 +176,15 @@ const createUser = async (req, res) => {
     });
 
     await user.save();
-
     const result = user.toObject();
     delete result.password;
+   // res.status(201).json({ message: "User created successfully", user });
 
-    res.status(201).json({ message: 'User created successfully', user: result });
+
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(400).json({
+      message: error.message
+    });
   }
 };
 
@@ -186,7 +203,9 @@ const getAllUsers = async (req, res) => {
 
     res.status(200).json(users);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message: error.message
+    });
   }
 };
 
@@ -200,7 +219,9 @@ const getUserById = async (req, res) => {
     if (!user) return res.status(404).json({ message: 'User not found' });
     res.status(200).json(user);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message: error.message
+    });
   }
 };
 
@@ -243,10 +264,18 @@ const updateUser = async (req, res) => {
       .select('-password')
       .populate('assignedTrainer', 'name email phone');
 
-    if (!user) return res.status(404).json({ message: 'User not found' });
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found"
+      });
+    }
+
     res.status(200).json(user);
+
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(400).json({
+      message: error.message
+    });
   }
 };
 
@@ -259,14 +288,18 @@ const deleteUser = async (req, res) => {
       return res.status(403).json({ message: 'Access denied' });
     }
 
+
     const user = await User.findByIdAndDelete(req.params.id);
     if (!user) return res.status(404).json({ message: 'User not found' });
 
     res.status(200).json({ message: 'User deleted successfully' });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message: error.message
+    });
   }
 };
+
 
 // 9. ASSIGN TRAINER
 const assignTrainer = async (req, res) => {
@@ -280,6 +313,7 @@ const assignTrainer = async (req, res) => {
     if (!trainer) return res.status(404).json({ message: 'Trainer not found' });
 
     member.assignedTrainer = trainer._id;
+
     await member.save();
 
     res.status(200).json({
@@ -296,8 +330,11 @@ const assignTrainer = async (req, res) => {
         email: trainer.email,
       },
     });
+
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message: error.message
+    });
   }
 };
 
