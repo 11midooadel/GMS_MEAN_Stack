@@ -6,7 +6,13 @@ const authorizeRoles = (...allowedRoles) => {
       });
     }
 
-    if (!allowedRoles.includes(req.user.role)) {
+    const userRole = String(req.user.role || "").toLowerCase();
+
+    const hasPermission = allowedRoles.some(
+      (role) => role.trim().toLowerCase() === userRole.trim().toLowerCase()
+    );
+
+    if (!hasPermission) {
       return res.status(403).json({
         message: "Access denied. You do not have permission",
       });

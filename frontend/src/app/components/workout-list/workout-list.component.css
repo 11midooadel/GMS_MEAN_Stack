@@ -4,12 +4,30 @@
 .wk__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
 .wk__card { display: flex; flex-direction: column; }
 .wk__card-top { display: flex; align-items: center; justify-content: space-between; }
+.wk__owner-actions { display: flex; align-items: center; gap: 2px; }
 .wk__icon { width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; color: #fff; background: linear-gradient(135deg, var(--gms-primary), var(--gms-primary-dark)); }
 .wk__icon mat-icon { font-size: 17px; width: 17px; height: 17px; }
 .wk__name { margin: 10px 0 2px; font-size: 1.1rem; font-weight: 600; }
+.wk__owner {
+  display: flex; align-items: center; gap: 6px;
+  margin: 0 0 4px; font-size: 0.85rem; color: var(--gms-primary); font-weight: 500;
+}
+.wk__owner mat-icon { font-size: 16px; width: 16px; height: 16px; }
+.wk__owner--trainer { color: var(--gms-text-muted); font-weight: 400; }
 .wk__desc { margin: 0 0 12px; font-size: 0.85rem; }
-.wk__days { display: flex; flex-direction: column; gap: 8px; }
-.wk__day { display: flex; justify-content: space-between; padding: 10px 12px; border-radius: 12px; background: var(--gms-card-soft); font-size: 0.85rem; }
+.wk__days {
+  display: flex; flex-direction: column; gap: 8px;
+  max-height: 260px; overflow-y: auto; padding-right: 4px;
+}
+.wk__day { padding: 10px 12px; border-radius: 12px; background: var(--gms-card-soft); font-size: 0.85rem; }
+.wk__day-head { display: flex; justify-content: space-between; }
+.wk__exercise {
+  display: flex; justify-content: space-between;
+  padding: 6px 0 0; margin-top: 6px; border-top: 1px solid var(--gms-border);
+  font-size: 0.8rem;
+}
+.wk__exercise:first-of-type { border-top: none; margin-top: 8px; padding-top: 0; }
+.wk__exercise-name { font-weight: 500; }
 .wk__foot { margin-top: 14px; font-size: 0.82rem; }
 .wk__foot span { display: inline-flex; align-items: center; gap: 6px; }
 .wk__foot mat-icon { font-size: 18px; width: 18px; height: 18px; }

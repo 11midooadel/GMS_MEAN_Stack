@@ -1,0 +1,17 @@
+.mm__head { margin-bottom: 22px; }
+.mm__loading { display: grid; place-items: center; padding: 60px; }
+.mm__empty { text-align: center; padding: 40px; }
+
+.mm__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
+.mm__card { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px; }
+.mm__avatar {
+  width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center;
+  color: #fff; font-size: 1.1rem; font-weight: 600;
+  background: linear-gradient(135deg, var(--gms-primary), var(--gms-primary-dark));
+  margin-bottom: 6px;
+}
+.mm__info { display: flex; flex-direction: column; margin-bottom: 10px; }
+.mm__name { font-weight: 600; }
+.mm__email { font-size: 0.8rem; }
+.mm__actions { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+.mm__actions button { width: 100%; }

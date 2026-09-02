@@ -1,67 +1,70 @@
-<header class="home__head">
-  <div>
-    <h1 class="gms-page-title">Hi, {{ firstName }} 👋</h1>
-    <p class="gms-page-subtitle">Ready to crush your goals today?</p>
+<div class="dashboard-page">
+<div class="header-section">
+  <h1>{{ isSuperAdmin ? 'Super Admin' : 'Admin' }} Dashboard</h1>
+  <p>System overview and user analytics</p>
+</div>
+
+  <div *ngIf="isLoading" class="loading-state">
+    <p>Loading dashboard metrics...</p>
   </div>
-  <button mat-flat-button color="primary" class="gms-pill" routerLink="/workouts">
-    <mat-icon>add</mat-icon> New Workout
-  </button>
-</header>
 
-<div class="home__grid">
-  <!-- Today's progress ring -->
-  <section class="gms-card home__progress">
-    <h3 class="home__card-title">Today's Progress</h3>
-    <div class="home__ring-wrap">
-      <svg viewBox="0 0 120 120" class="home__ring">
-        <circle cx="60" cy="60" r="52" class="home__ring-track" />
-        <circle cx="60" cy="60" r="52" class="home__ring-value"
-          [attr.stroke-dasharray]="circumference"
-          [attr.stroke-dashoffset]="dashOffset" />
-      </svg>
-      <div class="home__ring-label">
-        <strong>{{ progress }}%</strong>
-        <span>of goal</span>
+  <div *ngIf="!isLoading" class="metrics-grid">
+    <div class="metric-card">
+      <div class="card-icon blue">👥</div>
+      <div class="card-info">
+        <span class="card-title">Total Users</span>
+        <span class="metric-value">{{ totalUsers }}</span>
       </div>
     </div>
-  </section>
 
-  <!-- Stat cards -->
-  <section class="home__stats">
-    <div class="gms-card home__stat" *ngFor="let s of stats">
-      <span class="home__stat-icon" [class]="'tone-' + s.tone">
-        <mat-icon>{{ s.icon }}</mat-icon>
-      </span>
-      <div>
-        <span class="home__stat-value">{{ s.value }}</span>
-        <span class="home__stat-label">{{ s.label }}</span>
+    <div class="metric-card">
+      <div class="card-icon green">🏋️</div>
+      <div class="card-info">
+        <span class="card-title">Members</span>
+        <span class="metric-value">{{ totalMembers }}</span>
       </div>
     </div>
-  </section>
 
-  <!-- Weekly activity -->
-  <section class="gms-card home__week">
-    <h3 class="home__card-title">Weekly Activity</h3>
-    <div class="home__bars">
-      <div class="home__bar" *ngFor="let b of week">
-        <div class="home__bar-track">
-          <div class="home__bar-fill" [style.height.%]="b.v"></div>
-        </div>
-        <span class="home__bar-day">{{ b.d }}</span>
+    <div class="metric-card">
+      <div class="card-icon orange">🎯</div>
+      <div class="card-info">
+        <span class="card-title">Trainers</span>
+        <span class="metric-value">{{ totalTrainers }}</span>
       </div>
     </div>
-  </section>
 
-  <!-- Quick actions -->
-  <section class="home__quick">
-    <h3 class="home__card-title home__quick-title">Quick Actions</h3>
-    <div class="home__actions">
-      <a class="gms-card home__action" *ngFor="let a of quickActions" [routerLink]="a.route">
-        <span class="home__stat-icon" [class]="'tone-' + a.tone">
-          <mat-icon>{{ a.icon }}</mat-icon>
-        </span>
-        <span class="home__action-label">{{ a.label }}</span>
-      </a>
+    <div class="metric-card">
+      <div class="card-icon purple">🛡️</div>
+      <div class="card-info">
+        <span class="card-title">Admins</span>
+        <span class="metric-value">{{ totalAdmins }}</span>
+      </div>
     </div>
-  </section>
+  </div>
+
+  <!-- Recent Users Section -->
+  <div *ngIf="!isLoading" class="recent-users-section">
+    <h2>Recent Registrations</h2>
+    <table class="styled-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Phone</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of recentUsers">
+          <td>{{ user.name || 'N/A' }}</td>
+          <td>{{ user.email }}</td>
+          <td><span class="role-badge" [ngClass]="user.role">{{ user.role }}</span></td>
+          <td>{{ user.phone || 'N/A' }}</td>
+        </tr>
+        <tr *ngIf="recentUsers.length === 0">
+          <td colspan="4" class="no-data">No users found.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

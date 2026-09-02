@@ -1,51 +1,58 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { UsersService } from '../../core/services/users.service';
-import { Role, User } from '../../core/models/models';
+import { AuthService } from '../../core/services/auth.service';
+import { UsersService, User } from '../../core/services/users.service';
 import { MemberFormComponent } from '../member-form/member-form.component';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { AttendanceHistoryDialogComponent } from '../attendance-history-dialog/attendance-history-dialog.component';
+import { HealthHistoryDialogComponent } from '../health-history-dialog/health-history-dialog.component';
 
 @Component({
   selector: 'app-member-list',
   templateUrl: './member-list.component.html',
-  styleUrls: ['./member-list.component.css'],
+  styleUrls: ['./member-list.component.css']
 })
 export class MemberListComponent implements OnInit {
-  loading = true;
   users: User[] = [];
-  filtered: User[] = [];
-  search = '';
-  columns = ['name', 'email', 'role', 'actions'];
-
-  // Set from route data: 'Trainer' for the Trainers page, undefined for all.
-  roleFilter?: Role;
+  filteredUsers: User[] = [];
+  searchTerm = '';
+  currentRoleFilter = '';
+  pageTitle = 'Users List';
+  isLoading = false;
 
   constructor(
-    private usersSvc: UsersService,
-    private dialog: MatDialog,
-    private route: ActivatedRoute
+    public authService: AuthService,
+    private usersService: UsersService,
+    private route: ActivatedRoute,
+    private dialog: MatDialog
   ) {}
 
+  get canEdit(): boolean {
+    const role = this.authService.role?.toString().toLowerCase().replace(/\s+/g, '_');
+    return role === 'super_admin' || role === 'admin';
+  }
+
   ngOnInit(): void {
-    this.roleFilter = this.route.snapshot.data['roleFilter'];
-    this.load();
+    this.route.data.subscribe((data) => {
+      this.currentRoleFilter = data['role'] || '';
+      this.pageTitle = data['title'] || 'Users List';
+      this.loadUsers();
+    });
   }
 
-  get title(): string {
-    return this.roleFilter === 'Trainer' ? 'Trainers' : 'Members';
-  }
-
-  load(): void {
-    this.loading = true;
-    this.usersSvc.getAll().subscribe({
-      next: (data) => {
-        this.users = this.roleFilter
-          ? data.filter((u) => u.role === this.roleFilter)
-          : data;
-        this.applySearch();
-        this.loading = false;
+  loadUsers(): void {
+    this.isLoading = true;
+    this.usersService.getUsers(this.currentRoleFilter).subscribe({
+      next: (res: any) => {
+        const list: User[] = Array.isArray(res) ? res : (res.data || res.users || []);
+        this.users = list;
+        this.filterList();
+        this.isLoading = false;
       },
-      error: () => (this.loading = false),
+      error: () => {
+        this.isLoading = false;
+      }
     });
   }
 
@@ -58,18 +65,52 @@ export class MemberListComponent implements OnInit {
         );
   }
 
-  openForm(user?: User): void {
-    this.dialog
-      .open(MemberFormComponent, {
-        width: '460px',
-        data: { user, defaultRole: this.roleFilter },
-      })
-      .afterClosed()
-      .subscribe((changed) => changed && this.load());
+  viewAttendance(user: User): void {
+    this.dialog.open(AttendanceHistoryDialogComponent, {
+      width: '420px',
+      data: { userId: user._id!, userName: user.name },
+    });
+  }
+
+  viewHealth(user: User): void {
+    this.dialog.open(HealthHistoryDialogComponent, {
+      width: '440px',
+      data: { memberId: user._id!, memberName: user.name },
+    });
+  }
+
+  openEditModal(user: User): void {
+    if (!this.canEdit) return;
+
+    const dialogRef = this.dialog.open(MemberFormComponent, {
+      width: '500px',
+      data: {
+        user: { ...user },
+        role: user.role
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((updated) => {
+      if (updated) {
+        this.loadUsers();
+      }
+    });
   }
 
   remove(user: User): void {
-    if (!confirm(`Delete ${user.name}?`)) return;
-    this.usersSvc.delete(user._id!).subscribe(() => this.load());
+    this.dialog
+      .open(ConfirmDialogComponent, {
+        width: '360px',
+        data: {
+          title: 'Delete user?',
+          message: `This will permanently delete ${user.name}'s account. This can't be undone.`,
+          confirmText: 'Delete',
+        },
+      })
+      .afterClosed()
+      .subscribe((confirmed) => {
+        if (!confirmed) return;
+        this.usersSvc.delete(user._id!).subscribe(() => this.load());
+      });
   }
 }

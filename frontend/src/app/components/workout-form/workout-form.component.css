@@ -1,0 +1,47 @@
+.wf { width: 480px; max-width: 80vw; max-height: 65vh; }
+.wf__field { width: 100%; }
+
+.wf__days { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+.wf__day {
+  border: 1px solid var(--gms-border);
+  border-radius: var(--gms-radius-sm);
+  padding: 10px 12px;
+  background: var(--gms-card-soft);
+}
+.wf__day-head {
+  font-family: var(--gms-font-display);
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  letter-spacing: 0.5px;
+  color: var(--gms-primary);
+  margin-bottom: 6px;
+}
+
+.wf__exercise {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--gms-border);
+  font-size: 0.85rem;
+}
+.wf__exercise-name { flex: 1; font-weight: 500; }
+
+.wf__add-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+}
+.wf__input {
+  background: var(--gms-card);
+  border: 1px solid var(--gms-border);
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-size: 0.82rem;
+  color: var(--gms-text);
+  font-family: inherit;
+}
+.wf__input:focus { outline: 1px solid var(--gms-primary); }
+.wf__input--name { flex: 1; min-width: 0; }
+.wf__input--num { width: 60px; }

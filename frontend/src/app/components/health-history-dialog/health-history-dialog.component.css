@@ -1,0 +1,8 @@
+.hhd__title { font-size: 1.05rem !important; margin: 0 !important; }
+.hhd__content { min-width: 360px; max-width: 640px; max-height: 400px; overflow-x: auto; }
+.hhd__loading { display: grid; place-items: center; padding: 30px; }
+.hhd__empty { text-align: center; padding: 20px 0; }
+.hhd__table { width: 100%; background: transparent; }
+.hhd__table td, .hhd__table th { white-space: nowrap; }
+.hhd__table td.mat-column-notes, .hhd__table th.mat-column-notes { white-space: normal; min-width: 140px; }
+table.mat-mdc-table { box-shadow: none; }

@@ -1,5 +1,18 @@
 .att__head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 22px; flex-wrap: wrap; }
 .att__actions { display: flex; gap: 12px; }
+.att__actions button {
+  min-width: 130px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.att__actions button:hover { transform: scale(1.05); }
+.att__checkin:hover { box-shadow: 0 0 22px rgba(255, 106, 26, 0.25); }
+
+.att__checkout {
+  background: #000 !important;
+  color: #fff !important;
+  border: 1px solid var(--gms-border);
+}
+.att__checkout:hover { box-shadow: 0 0 22px rgba(255, 61, 61, 0.25); }
 .att__loading { display: grid; place-items: center; padding: 30px; }
 .att__table { width: 100%; background: transparent; }
 table.mat-mdc-table { box-shadow: none; }

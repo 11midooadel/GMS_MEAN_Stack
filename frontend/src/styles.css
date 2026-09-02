@@ -100,6 +100,51 @@ body {
 /* Roomy Material cards to match the design */
 .mat-mdc-card { border-radius: var(--gms-radius) !important; }
 
+/* Dialog panels (New Class, Edit User, Confirm, etc.) — Material's dark
+   theme gives dialogs their own generic grey surface by default; override
+   it so every dialog matches the app's actual dark card + border + shadow. */
+.mat-mdc-dialog-surface {
+  background: var(--gms-card) !important;
+  border: 1px solid var(--gms-border);
+  border-radius: var(--gms-radius) !important;
+  box-shadow: var(--gms-shadow) !important;
+  color: var(--gms-text) !important;
+}
+.mat-mdc-dialog-surface .mdc-dialog__title,
+.mat-mdc-dialog-surface .mdc-dialog__content {
+  color: var(--gms-text) !important;
+}
+
+/* Profile / user dropdown menu — match the app's card styling instead of
+   Material's generic default menu panel. */
+.mat-mdc-menu-panel {
+  background: var(--gms-card) !important;
+  border: 1px solid var(--gms-border) !important;
+  border-radius: var(--gms-radius-sm) !important;
+  box-shadow: var(--gms-shadow) !important;
+}
+.mat-mdc-menu-panel .mat-mdc-menu-item {
+  color: var(--gms-text) !important;
+}
+.mat-mdc-menu-panel .mat-mdc-menu-item:hover {
+  background: var(--gms-card-soft) !important;
+}
+
+/* Toast notifications (check-in, save confirmations, errors, etc.) — themed
+   to match the app instead of Material's plain default snackbar. */
+.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+  background: var(--gms-card) !important;
+  border: 1px solid var(--gms-border) !important;
+  border-radius: var(--gms-radius-sm) !important;
+  box-shadow: var(--gms-shadow) !important;
+}
+.mat-mdc-snack-bar-container .mdc-snackbar__label {
+  color: var(--gms-text) !important;
+}
+.mat-mdc-snack-bar-container .mat-mdc-button {
+  color: var(--gms-primary) !important;
+}
+
 /* Smaller icons app-wide (!important beats the Google Material Icons
    stylesheet's own .material-icons { font-size: 24px } rule) */
 .mat-icon {

@@ -1,9 +1,9 @@
 <header class="list__head">
   <div>
-    <h1 class="gms-page-title">Classes</h1>
-    <p class="gms-page-subtitle">Browse and join group training sessions.</p>
+    <h1 class="gms-page-title">{{ title }}</h1>
+    <p class="gms-page-subtitle">{{ subtitle }}</p>
   </div>
-  <button *ngIf="isTrainer" mat-flat-button color="primary" class="gms-pill" (click)="create()">
+  <button *ngIf="isTrainer" mat-flat-button color="primary" class="gms-pill" (click)="openForm()">
     <mat-icon>add</mat-icon> New Class
   </button>
 </header>
@@ -11,12 +11,23 @@
 <div *ngIf="loading" class="list__loading"><mat-spinner diameter="40"></mat-spinner></div>
 
 <div class="classes" *ngIf="!loading">
-  <article class="gms-card class-card" *ngFor="let c of classes">
+  <article
+    class="gms-card class-card"
+    [class.class-card--frozen]="isFrozen(c)"
+    *ngFor="let c of classes">
     <div class="class-card__top">
       <span class="class-card__icon"><mat-icon>fitness_center</mat-icon></span>
-      <button *ngIf="canManage" mat-icon-button color="warn" (click)="remove(c)" matTooltip="Delete">
-        <mat-icon>delete_outline</mat-icon>
-      </button>
+      <div *ngIf="canEdit(c)" class="class-card__owner-actions">
+        <button *ngIf="viewMode === 'teaching'" mat-icon-button (click)="viewMembers(c)" matTooltip="View members">
+          <mat-icon>group</mat-icon>
+        </button>
+        <button mat-icon-button (click)="openForm(c)" matTooltip="Edit">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="remove(c)" matTooltip="Delete">
+          <mat-icon>delete_outline</mat-icon>
+        </button>
+      </div>
     </div>
 
     <h3 class="class-card__name">{{ c.name }}</h3>
@@ -27,15 +38,22 @@
       <span><mat-icon>schedule</mat-icon> {{ c.startTime }} · {{ c.duration }}m</span>
       <span><mat-icon>event</mat-icon> {{ c.days.join(', ') }}</span>
       <span><mat-icon>groups</mat-icon> {{ c.capacity }} spots</span>
+      <span *ngIf="c.location"><mat-icon>place</mat-icon> {{ c.location }}</span>
     </div>
 
-    <div class="class-card__foot" *ngIf="isMember">
-      <button *ngIf="!enrolledIds.has(c._id!)" mat-flat-button color="primary" class="gms-pill" (click)="enroll(c)">
+    <div class="class-card__foot" *ngIf="viewMode === 'enrolled'">
+      <button mat-flat-button color="warn" class="gms-pill" (click)="leave(c)">
+        <mat-icon>logout</mat-icon> Leave class
+      </button>
+    </div>
+
+    <div class="class-card__foot" *ngIf="viewMode === 'browse' && isMember">
+      <button *ngIf="!isFrozen(c)" mat-flat-button color="primary" class="gms-pill" (click)="enroll(c)">
         Enroll
       </button>
-      <button *ngIf="enrolledIds.has(c._id!)" mat-stroked-button class="gms-pill" (click)="leave(c)">
-        <mat-icon>check</mat-icon> Enrolled — Leave
-      </button>
+      <span *ngIf="isFrozen(c)" class="gms-chip is-active class-card__locked">
+        <mat-icon>lock</mat-icon> Enrolled
+      </span>
     </div>
   </article>
 </div>

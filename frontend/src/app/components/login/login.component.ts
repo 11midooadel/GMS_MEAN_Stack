@@ -10,6 +10,7 @@ import { AuthService } from '../../core/services/auth.service';
 })
 export class LoginComponent {
   loading = false;
+
   form = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
@@ -23,10 +24,25 @@ export class LoginComponent {
 
   submit(): void {
     if (this.form.invalid) return;
+
     this.loading = true;
+
     const { email, password } = this.form.value;
+
     this.auth.login(email!, password!).subscribe({
-      next: () => this.router.navigate(['/dashboard']),
+      next: () => {
+        const role = this.auth.role;
+
+        if (role === 'Admin') {
+          this.router.navigate(['/dashboard/admin']);
+        } else if (role === 'Trainer') {
+          this.router.navigate(['/dashboard/trainer']);
+        } else if (role === 'Member') {
+          this.router.navigate(['/dashboard/member']);
+        } else {
+          this.router.navigate(['/dashboard']);
+        }
+      },
       error: () => (this.loading = false),
     });
   }

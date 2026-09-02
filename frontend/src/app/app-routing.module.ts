@@ -15,41 +15,93 @@ const routes: Routes = [
     component: MainLayoutComponent,
     canActivate: [authGuard],
     children: [
-      { path: 'dashboard',
-        loadChildren: () => import('./features/dashboard/dashboard.module').then((m) => m.DashboardModule) },
+      // 1. Dashboard (Restricted strictly to Super Admin)
+      {
+  path: 'dashboard',
+  canActivate: [roleGuard],
+  data: { roles: ['super_admin', 'Super Admin', 'admin', 'Admin'] },
+  loadChildren: () =>
+    import('./features/dashboard/dashboard.module').then((m) => m.DashboardModule),
+},
 
-      { path: 'members',
-        canActivate: [roleGuard], data: { roles: ['Admin', 'Super Admin'] },
-        loadChildren: () => import('./features/members/members.module').then((m) => m.MembersModule) },
+      // 2. Members Management
+      {
+        path: 'members',
+        canActivate: [roleGuard],
+        data: { roles: ['super_admin', 'Super Admin', 'admin', 'Admin', 'trainer', 'Trainer'] },
+        loadChildren: () =>
+          import('./features/members/members.module').then((m) => m.MembersModule),
+      },
 
-      { path: 'classes',
-        loadChildren: () => import('./features/classes/classes.module').then((m) => m.ClassesModule) },
+      // 3. Classes
+      { path: 'my-members',
+        canActivate: [roleGuard], data: { roles: ['Trainer'] },
+        loadChildren: () => import('./features/my-members/my-members.module').then((m) => m.MyMembersModule) },
 
-      { path: 'workouts',
-        loadChildren: () => import('./features/workouts/workouts.module').then((m) => m.WorkoutsModule) },
+      {
+        path: 'classes',
+        loadChildren: () =>
+          import('./features/classes/classes.module').then((m) => m.ClassesModule),
+      },
 
-      { path: 'attendance',
-        loadChildren: () => import('./features/attendance/attendance.module').then((m) => m.AttendanceModule) },
+      // 4. Workouts
+      {
+        path: 'workouts',
+        loadChildren: () =>
+          import('./features/workouts/workouts.module').then((m) => m.WorkoutsModule),
+      },
 
-      { path: 'plans',
-        loadChildren: () => import('./features/plans/plans.module').then((m) => m.PlansModule) },
+      // 5. Attendance
+      {
+        path: 'attendance',
+        canActivate: [roleGuard],
+        data: { roles: ['super_admin', 'Super Admin', 'admin', 'Admin', 'trainer', 'Trainer'] },
+        loadChildren: () =>
+          import('./features/attendance/attendance.module').then((m) => m.AttendanceModule),
+      },
 
-      { path: 'subscriptions',
-        loadChildren: () => import('./features/subscriptions/subscriptions.module').then((m) => m.SubscriptionsModule) },
+      // 6. Membership Plans
+      {
+        path: 'plans',
+        loadChildren: () =>
+          import('./features/plans/plans.module').then((m) => m.PlansModule),
+      },
 
-      { path: 'payments',
-        loadChildren: () => import('./features/payments/payments.module').then((m) => m.PaymentsModule) },
+      // 7. Subscriptions
+      {
+        path: 'subscriptions',
+        loadChildren: () =>
+          import('./features/subscriptions/subscriptions.module').then((m) => m.SubscriptionsModule),
+      },
 
-      { path: 'health',
-        loadChildren: () => import('./features/health/health.module').then((m) => m.HealthModule) },
+      // 8. Payments
+      {
+        path: 'payments',
+        canActivate: [roleGuard],
+        data: { roles: ['super_admin', 'Super Admin', 'admin', 'Admin'] },
+        loadChildren: () =>
+          import('./features/payments/payments.module').then((m) => m.PaymentsModule),
+      },
 
-      { path: 'profile',
-        loadChildren: () => import('./features/profile/profile.module').then((m) => m.ProfileModule) },
+      // 9. Health Records
+      {
+        path: 'health',
+        loadChildren: () =>
+          import('./features/health/health.module').then((m) => m.HealthModule),
+      },
 
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      // 10. Profile
+      {
+        path: 'profile',
+        loadChildren: () =>
+          import('./features/profile/profile.module').then((m) => m.ProfileModule),
+      },
+
+      // Default redirect
+      { path: '', redirectTo: 'workouts', pathMatch: 'full' },
     ],
   },
-  { path: '**', redirectTo: 'dashboard' },
+  { path: '**', redirectTo: 'workouts' },
 ];
 
 @NgModule({

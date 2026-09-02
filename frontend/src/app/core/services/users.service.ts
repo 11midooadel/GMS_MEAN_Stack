@@ -1,17 +1,46 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { User } from '../models/models';
 
-@Injectable({ providedIn: 'root' })
+export interface User {
+  _id: string;
+  name: string;
+  email: string;
+  role: 'super_admin' | 'admin' | 'trainer' | 'member';
+  phone?: string;
+  status?: string;
+  assignedTrainer?: any;
+  createdAt?: string;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
 export class UsersService {
-  private readonly base = `${environment.apiUrl}/users`;
+  private readonly apiUrl = `${environment.apiUrl}/users`;
+
   constructor(private http: HttpClient) {}
 
-  getAll(): Observable<User[]> {
-    return this.http.get<User[]>(this.base);
+  // 1. Get all users or filter by role ('member', 'trainer', etc.)
+  getUsers(role?: string): Observable<User[]> {
+    let params = new HttpParams();
+    if (role) {
+      params = params.set('role', role);
+    }
+    return this.http.get<User[]>(this.apiUrl, { params });
   }
+
+  // Alias used by some template components
+  getAll(role?: string): Observable<User[]> {
+    return this.getUsers(role);
+  }
+
+  // 2. Get single user by ID
+  getUserById(id: string): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/${id}`);
+  }
+
   getById(id: string): Observable<User> {
     return this.http.get<User>(`${this.base}/${id}`);
   }
@@ -26,5 +55,9 @@ export class UsersService {
   }
   assignTrainer(memberId: string, trainerId: string): Observable<any> {
     return this.http.put(`${this.base}/assign-trainer`, { memberId, trainerId });
+  }
+  /** The members currently assigned to the logged-in Trainer. */
+  getMyMembers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.base}/my-members`);
   }
 }

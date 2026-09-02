@@ -30,7 +30,7 @@ export class RegisterComponent {
     const { name, email, password } = this.form.value;
     this.auth.register(name!, email!, password!).subscribe({
       next: () => {
-        this.snack.open('Account created! Please log in.', 'OK', { duration: 3500 });
+        this.snack.open('Your account has been created successfully. Please log in.', 'OK', { duration: 3500 });
         this.router.navigate(['/auth/login']);
       },
       error: () => (this.loading = false),
