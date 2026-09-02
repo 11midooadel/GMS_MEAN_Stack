@@ -1,75 +1,135 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { UsersService } from '../../core/services/users.service';
-import { Role, User } from '../../core/models/models';
+import { AuthService } from '../../core/services/auth.service';
+import { UsersService, User } from '../../core/services/users.service';
 import { MemberFormComponent } from '../member-form/member-form.component';
 
 @Component({
   selector: 'app-member-list',
   templateUrl: './member-list.component.html',
-  styleUrls: ['./member-list.component.css'],
+  styleUrls: ['./member-list.component.css']
 })
 export class MemberListComponent implements OnInit {
-  loading = true;
   users: User[] = [];
-  filtered: User[] = [];
-  search = '';
-  columns = ['name', 'email', 'role', 'actions'];
-
-  // Set from route data: 'Trainer' for the Trainers page, undefined for all.
-  roleFilter?: Role;
+  filteredUsers: User[] = [];
+  searchTerm = '';
+  currentRoleFilter = '';
+  pageTitle = 'Users List';
+  isLoading = false;
 
   constructor(
-    private usersSvc: UsersService,
-    private dialog: MatDialog,
-    private route: ActivatedRoute
+    public authService: AuthService,
+    private usersService: UsersService,
+    private route: ActivatedRoute,
+    private dialog: MatDialog
   ) {}
 
+  get canEdit(): boolean {
+    const role = this.authService.role?.toString().toLowerCase().replace(/\s+/g, '_');
+    return role === 'super_admin' || role === 'admin';
+  }
+
   ngOnInit(): void {
-    this.roleFilter = this.route.snapshot.data['roleFilter'];
-    this.load();
-  }
-
-  get title(): string {
-    return this.roleFilter === 'Trainer' ? 'Trainers' : 'Members';
-  }
-
-  load(): void {
-    this.loading = true;
-    this.usersSvc.getAll().subscribe({
-      next: (data) => {
-        this.users = this.roleFilter
-          ? data.filter((u) => u.role === this.roleFilter)
-          : data;
-        this.applySearch();
-        this.loading = false;
-      },
-      error: () => (this.loading = false),
+    this.route.data.subscribe((data) => {
+      this.currentRoleFilter = data['role'] || '';
+      this.pageTitle = data['title'] || 'Users List';
+      this.loadUsers();
     });
   }
 
-  applySearch(): void {
-    const q = this.search.toLowerCase().trim();
-    this.filtered = !q
-      ? this.users
-      : this.users.filter(
-          (u) => u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q)
-        );
+  loadUsers(): void {
+    this.isLoading = true;
+    this.usersService.getUsers(this.currentRoleFilter).subscribe({
+      next: (res: any) => {
+        const list: User[] = Array.isArray(res) ? res : (res.data || res.users || []);
+        this.users = list;
+        this.filterList();
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
+      }
+    });
   }
 
-  openForm(user?: User): void {
-    this.dialog
-      .open(MemberFormComponent, {
-        width: '460px',
-        data: { user, defaultRole: this.roleFilter },
-      })
-      .afterClosed()
-      .subscribe((changed) => changed && this.load());
+  openAddModal(): void {
+    if (!this.canEdit) return;
+
+    const dialogRef = this.dialog.open(MemberFormComponent, {
+      width: '500px',
+      data: {
+        role: this.currentRoleFilter || 'trainer',
+        user: null
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.loadUsers();
+      }
+    });
   }
 
-  remove(user: User): void {
-    if (!confirm(`Delete ${user.name}?`)) return;
-    this.usersSvc.delete(user._id!).subscribe(() => this.load());
+  openEditModal(user: User): void {
+    if (!this.canEdit) return;
+
+    const dialogRef = this.dialog.open(MemberFormComponent, {
+      width: '500px',
+      data: {
+        user: { ...user },
+        role: user.role
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((updated) => {
+      if (updated) {
+        this.loadUsers();
+      }
+    });
+  }
+
+  onRoleSelectChange(user: User, newRole: string): void {
+    if (!this.canEdit) return;
+
+    const previousRole = user.role;
+    user.role = newRole as any;
+
+    this.usersService.update(user._id, { role: newRole }).subscribe({
+      next: () => {
+        console.log(`Role for ${user.name} successfully updated to ${newRole}`);
+      },
+      error: (err) => {
+        console.error('Failed to update user role:', err);
+        user.role = previousRole;
+      }
+    });
+  }
+
+  filterList(): void {
+    const query = this.searchTerm.trim().toLowerCase();
+    if (!query) {
+      this.filteredUsers = [...this.users];
+      return;
+    }
+    this.filteredUsers = this.users.filter(
+      (u) =>
+        u.name?.toLowerCase().includes(query) ||
+        u.email?.toLowerCase().includes(query) ||
+        u.role?.toLowerCase().includes(query)
+    );
+  }
+
+  deleteUser(id: string): void {
+    if (!this.canEdit) return;
+
+    if (confirm('Are you sure you want to delete this record?')) {
+      this.usersService.deleteUser(id).subscribe({
+        next: () => {
+          this.users = this.users.filter((u) => u._id !== id);
+          this.filterList();
+        }
+      });
+    }
   }
 }

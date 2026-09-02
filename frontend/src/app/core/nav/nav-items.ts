@@ -4,43 +4,99 @@ export interface NavItem {
   label: string;
   icon: string;         // Material icon name
   route: string;
-  roles: Role[];        // which roles see this item
+  roles: (Role | string)[]; // which roles see this item
 }
 
 /** Sidebar menu. Each item is filtered by the logged-in user's role. */
 export const NAV_ITEMS: NavItem[] = [
-  { label: 'Dashboard', icon: 'grid_view', route: '/dashboard',
-    roles: ['Super Admin', 'Admin', 'Member', 'Trainer'] },
+  // 1. Super Admin Dashboard (Restricted to Super Admin only)
+  {
+    label: 'Dashboard',
+    icon: 'grid_view',
+    route: '/dashboard',
+    roles: ['Super Admin', 'super_admin', 'Admin', 'admin']
+  },
 
-  { label: 'Members', icon: 'group', route: '/members',
-    roles: ['Super Admin', 'Admin'] },
+  // 2. Members Management
+  {
+    label: 'Members',
+    icon: 'group',
+    route: '/members',
+    roles: ['Super Admin', 'super_admin', 'Admin', 'admin']
+  },
 
-  { label: 'Trainers', icon: 'sports', route: '/members/trainers',
-    roles: ['Super Admin', 'Admin'] },
+  // 3. Trainers Management
+  {
+    label: 'Trainers',
+    icon: 'sports',
+    route: '/members/trainers',
+    roles: ['Super Admin', 'super_admin', 'Admin', 'admin']
+  },
 
-  { label: 'Classes', icon: 'fitness_center', route: '/classes',
-    roles: ['Super Admin', 'Admin', 'Member', 'Trainer'] },
+  // 4. Classes
+  {
+    label: 'Classes',
+    icon: 'fitness_center',
+    route: '/classes',
+    roles: ['Super Admin', 'super_admin', 'Admin', 'admin', 'Member', 'member', 'Trainer', 'trainer']
+  },
 
-  { label: 'Workout Plans', icon: 'assignment', route: '/workouts',
-    roles: ['Super Admin', 'Admin', 'Member', 'Trainer'] },
+  // 5. Workout Plans
+  {
+    label: 'Workout Plans',
+    icon: 'assignment',
+    route: '/workouts',
+    roles: ['Super Admin', 'super_admin', 'Admin', 'admin', 'Member', 'member', 'Trainer', 'trainer']
+  },
 
-  { label: 'Attendance', icon: 'how_to_reg', route: '/attendance',
-    roles: ['Super Admin', 'Admin', 'Member', 'Trainer'] },
+  // 6. Attendance
+  {
+    label: 'Attendance',
+    icon: 'how_to_reg',
+    route: '/attendance',
+    roles: ['Super Admin', 'super_admin', 'Admin', 'admin', 'Member', 'member', 'Trainer', 'trainer']
+  },
 
-  { label: 'Membership Plans', icon: 'card_membership', route: '/plans',
-    roles: ['Super Admin', 'Admin', 'Member'] },
+  // 7. Membership Plans
+  {
+    label: 'Membership Plans',
+    icon: 'card_membership',
+    route: '/plans',
+    roles: ['Super Admin', 'super_admin', 'Admin', 'admin', 'Member', 'member']
+  },
 
-  { label: 'Subscriptions', icon: 'autorenew', route: '/subscriptions',
-    roles: ['Super Admin', 'Admin', 'Member'] },
+  // 8. Subscriptions
+  {
+    label: 'Subscriptions',
+    icon: 'autorenew',
+    route: '/subscriptions',
+    roles: ['Super Admin', 'super_admin', 'Admin', 'admin', 'Member', 'member']
+  },
 
-  { label: 'Payments', icon: 'payments', route: '/payments',
-    roles: ['Super Admin', 'Admin', 'Member'] },
+  // 9. Payments
+  {
+    label: 'Payments',
+    icon: 'payments',
+    route: '/payments',
+    roles: ['Super Admin', 'super_admin', 'Admin', 'admin']
+  },
 
-  { label: 'Health Records', icon: 'monitor_heart', route: '/health',
-    roles: ['Super Admin', 'Admin', 'Member'] },
+  // 10. Health Records
+  {
+    label: 'Health Records',
+    icon: 'monitor_heart',
+    route: '/health',
+    roles: ['Super Admin', 'super_admin', 'Admin', 'admin', 'Member', 'member']
+  },
 ];
 
-export function navForRole(role: Role | null): NavItem[] {
+/** Filters navigation items for the given role safely with case-insensitive check */
+export function navForRole(role: Role | string | null): NavItem[] {
   if (!role) return [];
-  return NAV_ITEMS.filter((i) => i.roles.includes(role));
+
+  const normalizedUserRole = role.toString().toLowerCase().replace(/\s+/g, '_');
+
+  return NAV_ITEMS.filter((item) =>
+    item.roles.some((r) => r.toString().toLowerCase().replace(/\s+/g, '_') === normalizedUserRole)
+  );
 }

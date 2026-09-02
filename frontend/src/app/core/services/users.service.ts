@@ -1,30 +1,74 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { User } from '../models/models';
 
-@Injectable({ providedIn: 'root' })
+export interface User {
+  _id: string;
+  name: string;
+  email: string;
+  role: 'super_admin' | 'admin' | 'trainer' | 'member';
+  phone?: string;
+  status?: string;
+  assignedTrainer?: any;
+  createdAt?: string;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
 export class UsersService {
-  private readonly base = `${environment.apiUrl}/users`;
+  private readonly apiUrl = `${environment.apiUrl}/users`;
+
   constructor(private http: HttpClient) {}
 
-  getAll(): Observable<User[]> {
-    return this.http.get<User[]>(this.base);
+  // 1. Get all users or filter by role ('member', 'trainer', etc.)
+  getUsers(role?: string): Observable<User[]> {
+    let params = new HttpParams();
+    if (role) {
+      params = params.set('role', role);
+    }
+    return this.http.get<User[]>(this.apiUrl, { params });
   }
+
+  // Alias used by some template components
+  getAll(role?: string): Observable<User[]> {
+    return this.getUsers(role);
+  }
+
+  // 2. Get single user by ID
+  getUserById(id: string): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/${id}`);
+  }
+
   getById(id: string): Observable<User> {
-    return this.http.get<User>(`${this.base}/${id}`);
+    return this.getUserById(id);
   }
-  create(body: Partial<User> & { password: string }): Observable<any> {
-    return this.http.post(this.base, body);
+
+  // 3. Create a new user (with 'create' alias)
+  createUser(userData: Partial<User> | any): Observable<User> {
+    return this.http.post<User>(this.apiUrl, userData);
   }
-  update(id: string, body: Partial<User> & { password?: string }): Observable<User> {
-    return this.http.put<User>(`${this.base}/${id}`, body);
+
+  create(userData: Partial<User> | any): Observable<User> {
+    return this.createUser(userData);
   }
-  delete(id: string): Observable<any> {
-    return this.http.delete(`${this.base}/${id}`);
+
+  // 4. Update existing user (with 'update' alias)
+  updateUser(id: string, userData: Partial<User> | any): Observable<User> {
+    return this.http.put<User>(`${this.apiUrl}/${id}`, userData);
   }
-  assignTrainer(memberId: string, trainerId: string): Observable<any> {
-    return this.http.put(`${this.base}/assign-trainer`, { memberId, trainerId });
+
+  update(id: string, userData: Partial<User> | any): Observable<User> {
+    return this.updateUser(id, userData);
+  }
+
+  // 5. Delete user
+  deleteUser(id: string): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(`${this.apiUrl}/${id}`);
+  }
+
+  delete(id: string): Observable<{ message: string }> {
+    return this.deleteUser(id);
   }
 }

@@ -1,20 +1,42 @@
-import { inject } from '@angular/core';
-import { CanActivateFn, Router } from '@angular/router';
+import { Injectable, inject } from '@angular/core';
+import { CanActivate, CanActivateFn, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { Role } from '../models/models';
 
-/**
- * Restricts a route to specific roles.
- * Usage in routes: { canActivate: [roleGuard], data: { roles: ['Admin'] } }
- */
-export const roleGuard: CanActivateFn = (route) => {
-  const auth = inject(AuthService);
-  const router = inject(Router);
+@Injectable({
+  providedIn: 'root'
+})
+export class RoleGuard implements CanActivate {
+  constructor(private authService: AuthService, private router: Router) {}
 
-  const allowed = (route.data?.['roles'] as Role[]) ?? [];
-  if (auth.isLoggedIn && (allowed.length === 0 || auth.hasRole(...allowed))) {
-    return true;
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    return checkRoleAccess(route, this.authService, this.router);
   }
-  router.navigate(['/dashboard']);
-  return false;
+}
+
+// Functional guard export for Angular 15+
+export const roleGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
+  return checkRoleAccess(route, authService, router);
 };
+
+function checkRoleAccess(route: ActivatedRouteSnapshot, authService: AuthService, router: Router): boolean {
+  if (!authService.isLoggedIn) {
+    router.navigate(['/auth/login']);
+    return false;
+  }
+
+  const expectedRoles: string[] = route.data?.['roles'] || [];
+  const currentRole = authService.role?.toString().toLowerCase().replace(/\s+/g, '_');
+
+  if (expectedRoles.length === 0) return true;
+
+  const isAuthorized = expectedRoles.some(
+    (r) => r.toString().toLowerCase().replace(/\s+/g, '_') === currentRole
+  );
+
+  if (isAuthorized) return true;
+
+  router.navigate(['/workouts']);
+  return false;
+}

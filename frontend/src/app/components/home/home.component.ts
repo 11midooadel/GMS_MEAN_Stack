@@ -1,47 +1,65 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
-
-interface StatCard {
-  label: string; value: string; icon: string; tone: string;
-}
+import { UsersService, User } from '../../core/services/users.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css'],
+  styleUrls: ['./home.component.css']
 })
-export class HomeComponent {
-  // NOTE: the progress figures below are demo values for the template.
-  // Wire them to attendance/workout/health services per role as needed.
-  progress = 75;
-  readonly circumference = 2 * Math.PI * 52;
+export class HomeComponent implements OnInit {
+  totalUsers = 0;
+  totalMembers = 0;
+  totalTrainers = 0;
+  totalAdmins = 0;
+  recentUsers: User[] = [];
+  isLoading = true;
 
-  stats: StatCard[] = [
-    { label: 'Workout', value: '45 min', icon: 'exercise', tone: 'green' },
-    { label: 'Calories', value: '520 kcal', icon: 'local_fire_department', tone: 'coral' },
-    { label: 'Steps', value: '8,752', icon: 'directions_walk', tone: 'blue' },
-    { label: 'Active Time', value: '1h 15m', icon: 'schedule', tone: 'purple' },
-  ];
+  constructor(
+    public authService: AuthService,
+    private usersService: UsersService,
+    private router: Router
+  ) {}
 
-  week = [
-    { d: 'M', v: 45 }, { d: 'T', v: 62 }, { d: 'W', v: 80 },
-    { d: 'T', v: 40 }, { d: 'F', v: 70 }, { d: 'S', v: 55 }, { d: 'S', v: 30 },
-  ];
-
-  quickActions = [
-    { label: 'Start Workout', icon: 'play_circle', route: '/workouts', tone: 'green' },
-    { label: 'Log Food', icon: 'restaurant', route: '/health', tone: 'coral' },
-    { label: 'Body Stats', icon: 'monitor_weight', route: '/health', tone: 'purple' },
-    { label: 'Classes', icon: 'fitness_center', route: '/classes', tone: 'blue' },
-  ];
-
-  constructor(private auth: AuthService) {}
-
-  get firstName(): string {
-    return this.auth.currentUser?.name?.split(' ')[0] ?? 'there';
+  get isSuperAdmin(): boolean {
+    const r = this.authService.role?.toString().toLowerCase().replace(/\s+/g, '_');
+    return r === 'super_admin';
   }
 
-  get dashOffset(): number {
-    return this.circumference * (1 - this.progress / 100);
+  ngOnInit(): void {
+    const role = this.authService.role?.toString().toLowerCase().replace(/\s+/g, '_');
+
+    // Restrict access so only Super Admin and Admin can view the dashboard
+    if (role !== 'super_admin' && role !== 'admin') {
+      this.router.navigate(['/workouts']);
+      return;
+    }
+
+    this.loadDashboardData();
+  }
+
+  loadDashboardData(): void {
+    this.isLoading = true;
+    this.usersService.getUsers().subscribe({
+      next: (res: any) => {
+        const users: User[] = Array.isArray(res) ? res : (res.data || res.users || []);
+
+        this.totalUsers = users.length;
+        this.totalMembers = users.filter((u) => u.role?.toLowerCase() === 'member').length;
+        this.totalTrainers = users.filter((u) => u.role?.toLowerCase() === 'trainer').length;
+        this.totalAdmins = users.filter((u) => {
+          const r = u.role?.toLowerCase().replace(/\s+/g, '_');
+          return r === 'admin' || r === 'super_admin';
+        }).length;
+
+        this.recentUsers = [...users].slice(-5).reverse();
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Failed to load dashboard data:', err);
+        this.isLoading = false;
+      }
+    });
   }
 }

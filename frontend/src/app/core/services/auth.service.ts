@@ -54,11 +54,16 @@ export class AuthService {
     return !!this.token;
   }
 
-  hasRole(...roles: Role[]): boolean {
-    const r = this.role;
-    return !!r && roles.includes(r);
-  }
+ hasRole(...roles: (Role | string | (Role | string)[])[]): boolean {
+  const userRole = this.role?.toString().toLowerCase().replace(/\s+/g, '_');
+  if (!userRole) return false;
 
+  const flatRoles = roles
+    .flat()
+    .map((r) => r.toString().toLowerCase().replace(/\s+/g, '_'));
+
+  return flatRoles.includes(userRole);
+}
   private persistSession(res: AuthResponse): void {
     localStorage.setItem(TOKEN_KEY, res.token);
     localStorage.setItem(USER_KEY, JSON.stringify(res.user));
