@@ -47,7 +47,6 @@ export class AuthService {
   }
 
   get role(): Role | null {
-  console.log('CURRENT ROLE:', this.currentUser$.value?.role);
   return this.currentUser$.value?.role ?? null;
 }
 

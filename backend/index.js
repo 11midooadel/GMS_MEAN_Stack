@@ -16,11 +16,6 @@ const PORT = process.env.PORT || 5000;
 app.use(cors()); // Allows Angular frontend to make requests
 app.use(express.json()); // Parse JSON request bodies
 
-app.use((req, res, next) => {
-  console.log("REQUEST:", req.method, req.originalUrl);
-  next();
-});
-
 // 3. API Routes
 app.use("/users", require("./routes/users"));
 app.use("/payments", require("./routes/payments"));

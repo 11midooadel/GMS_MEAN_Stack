@@ -32,11 +32,6 @@ router.post('/', auth, authorizeRoles("Admin", "Super Admin"), createUser);
 router.get(
   "/",
   auth,
-  (req, res, next) => {
-    console.log("GET /users HIT");
-    console.log("REQ USER:", req.user);
-    next();
-  },
   authorizeRoles("Admin", "Super Admin"),
   getAllUsers
 );

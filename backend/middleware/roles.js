@@ -1,5 +1,3 @@
-console.log("ROLES.JS LOADED");
-
 const authorizeRoles = (...allowedRoles) => {
   return (req, res, next) => {
     if (!req.user) {
@@ -10,14 +8,9 @@ const authorizeRoles = (...allowedRoles) => {
 
     const userRole = String(req.user.role || "").toLowerCase();
 
-    console.log("USER ROLE:", req.user.role);
-    console.log("ALLOWED ROLES:", allowedRoles);
-
     const hasPermission = allowedRoles.some(
       (role) => role.trim().toLowerCase() === userRole.trim().toLowerCase()
     );
-
-    console.log("HAS PERMISSION:", hasPermission);
 
     if (!hasPermission) {
       return res.status(403).json({
