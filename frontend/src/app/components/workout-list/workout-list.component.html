@@ -11,15 +11,29 @@
   <article class="gms-card wk__card" *ngFor="let p of plans">
     <div class="wk__card-top">
       <span class="wk__icon"><mat-icon>assignment</mat-icon></span>
-      <span class="gms-chip is-active">{{ p.days.length }} days</span>
+      <div class="wk__owner-actions" *ngIf="canManage">
+        <button mat-icon-button (click)="openForm(p)" matTooltip="Edit"><mat-icon>edit</mat-icon></button>
+        <button mat-icon-button color="warn" (click)="remove(p)" matTooltip="Delete"><mat-icon>delete_outline</mat-icon></button>
+      </div>
+      <span class="gms-chip is-active" *ngIf="!canManage">{{ p.days.length }} days</span>
     </div>
     <h3 class="wk__name">{{ p.name }}</h3>
+    <!-- Admin: member + their trainer. Trainer: member only (it's their own account). Member: their trainer only (it's their own account). -->
+    <p class="wk__owner" *ngIf="isAdmin || isTrainer"><mat-icon>person</mat-icon> {{ memberName(p) }}</p>
+    <p class="wk__owner wk__owner--trainer" *ngIf="isAdmin && trainerName(p) as tn"><mat-icon>sports</mat-icon> {{ tn }}</p>
+    <p class="wk__owner" *ngIf="isMember && trainerName(p) as mtn"><mat-icon>sports</mat-icon> {{ mtn }}</p>
     <p class="gms-muted wk__desc">{{ p.description || 'Training plan' }}</p>
 
     <div class="wk__days">
       <div class="wk__day" *ngFor="let d of p.days">
-        <strong>{{ d.day }}</strong>
-        <span class="gms-muted">{{ d.exercises.length }} exercises</span>
+        <div class="wk__day-head">
+          <strong>{{ d.day }}</strong>
+          <span class="gms-muted">{{ d.exercises.length }} exercises</span>
+        </div>
+        <div class="wk__exercise" *ngFor="let ex of d.exercises">
+          <span class="wk__exercise-name">{{ ex.name }}</span>
+          <span class="gms-muted">{{ ex.sets }} × {{ ex.reps }}</span>
+        </div>
       </div>
     </div>
 

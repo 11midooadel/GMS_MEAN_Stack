@@ -4,6 +4,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '../../core/services/auth.service';
 import { UsersService, User } from '../../core/services/users.service';
 import { MemberFormComponent } from '../member-form/member-form.component';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { AttendanceHistoryDialogComponent } from '../attendance-history-dialog/attendance-history-dialog.component';
+import { HealthHistoryDialogComponent } from '../health-history-dialog/health-history-dialog.component';
 
 @Component({
   selector: 'app-member-list',
@@ -53,21 +56,26 @@ export class MemberListComponent implements OnInit {
     });
   }
 
-  openAddModal(): void {
-    if (!this.canEdit) return;
+  applySearch(): void {
+    const q = this.search.toLowerCase().trim();
+    this.filtered = !q
+      ? this.users
+      : this.users.filter(
+          (u) => u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q)
+        );
+  }
 
-    const dialogRef = this.dialog.open(MemberFormComponent, {
-      width: '500px',
-      data: {
-        role: this.currentRoleFilter || 'trainer',
-        user: null
-      }
+  viewAttendance(user: User): void {
+    this.dialog.open(AttendanceHistoryDialogComponent, {
+      width: '420px',
+      data: { userId: user._id!, userName: user.name },
     });
+  }
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.loadUsers();
-      }
+  viewHealth(user: User): void {
+    this.dialog.open(HealthHistoryDialogComponent, {
+      width: '440px',
+      data: { memberId: user._id!, memberName: user.name },
     });
   }
 
@@ -89,47 +97,20 @@ export class MemberListComponent implements OnInit {
     });
   }
 
-  onRoleSelectChange(user: User, newRole: string): void {
-    if (!this.canEdit) return;
-
-    const previousRole = user.role;
-    user.role = newRole as any;
-
-    this.usersService.update(user._id, { role: newRole }).subscribe({
-      next: () => {
-        console.log(`Role for ${user.name} successfully updated to ${newRole}`);
-      },
-      error: (err) => {
-        console.error('Failed to update user role:', err);
-        user.role = previousRole;
-      }
-    });
-  }
-
-  filterList(): void {
-    const query = this.searchTerm.trim().toLowerCase();
-    if (!query) {
-      this.filteredUsers = [...this.users];
-      return;
-    }
-    this.filteredUsers = this.users.filter(
-      (u) =>
-        u.name?.toLowerCase().includes(query) ||
-        u.email?.toLowerCase().includes(query) ||
-        u.role?.toLowerCase().includes(query)
-    );
-  }
-
-  deleteUser(id: string): void {
-    if (!this.canEdit) return;
-
-    if (confirm('Are you sure you want to delete this record?')) {
-      this.usersService.deleteUser(id).subscribe({
-        next: () => {
-          this.users = this.users.filter((u) => u._id !== id);
-          this.filterList();
-        }
+  remove(user: User): void {
+    this.dialog
+      .open(ConfirmDialogComponent, {
+        width: '360px',
+        data: {
+          title: 'Delete user?',
+          message: `This will permanently delete ${user.name}'s account. This can't be undone.`,
+          confirmText: 'Delete',
+        },
+      })
+      .afterClosed()
+      .subscribe((confirmed) => {
+        if (!confirmed) return;
+        this.usersSvc.delete(user._id!).subscribe(() => this.load());
       });
-    }
   }
 }

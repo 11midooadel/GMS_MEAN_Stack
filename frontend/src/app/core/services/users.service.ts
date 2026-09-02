@@ -42,33 +42,22 @@ export class UsersService {
   }
 
   getById(id: string): Observable<User> {
-    return this.getUserById(id);
+    return this.http.get<User>(`${this.base}/${id}`);
   }
-
-  // 3. Create a new user (with 'create' alias)
-  createUser(userData: Partial<User> | any): Observable<User> {
-    return this.http.post<User>(this.apiUrl, userData);
+  create(body: Partial<User> & { password: string }): Observable<any> {
+    return this.http.post(this.base, body);
   }
-
-  create(userData: Partial<User> | any): Observable<User> {
-    return this.createUser(userData);
+  update(id: string, body: Partial<User> & { password?: string }): Observable<User> {
+    return this.http.put<User>(`${this.base}/${id}`, body);
   }
-
-  // 4. Update existing user (with 'update' alias)
-  updateUser(id: string, userData: Partial<User> | any): Observable<User> {
-    return this.http.put<User>(`${this.apiUrl}/${id}`, userData);
+  delete(id: string): Observable<any> {
+    return this.http.delete(`${this.base}/${id}`);
   }
-
-  update(id: string, userData: Partial<User> | any): Observable<User> {
-    return this.updateUser(id, userData);
+  assignTrainer(memberId: string, trainerId: string): Observable<any> {
+    return this.http.put(`${this.base}/assign-trainer`, { memberId, trainerId });
   }
-
-  // 5. Delete user
-  deleteUser(id: string): Observable<{ message: string }> {
-    return this.http.delete<{ message: string }>(`${this.apiUrl}/${id}`);
-  }
-
-  delete(id: string): Observable<{ message: string }> {
-    return this.deleteUser(id);
+  /** The members currently assigned to the logged-in Trainer. */
+  getMyMembers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.base}/my-members`);
   }
 }

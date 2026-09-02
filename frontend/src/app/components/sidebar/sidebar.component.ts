@@ -9,13 +9,10 @@ import { navForRole, NavItem } from '../../core/nav/nav-items';
 })
 export class SidebarComponent implements OnInit {
   @Output() navigate = new EventEmitter<void>();
-  items: NavItem[] = [];
 
-  constructor(public authService: AuthService) {}
+  constructor(private auth: AuthService) {}
 
-  ngOnInit(): void {
-    this.authService.user$.subscribe((user) => {
-      this.items = navForRole(user?.role ?? this.authService.role);
-    });
+  get items(): NavItem[] {
+    return navForRole(this.auth.role);
   }
 }

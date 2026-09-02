@@ -1,0 +1,61 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Edit' : 'New' }} Workout Plan — {{ data.memberName }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="save()">
+  <mat-dialog-content class="wf">
+    <mat-form-field appearance="outline" class="wf__field">
+      <mat-label>Plan name</mat-label>
+      <input matInput formControlName="name" placeholder="e.g. Beginner Strength" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="wf__field">
+      <mat-label>Description (optional)</mat-label>
+      <input matInput formControlName="description" />
+    </mat-form-field>
+
+    <div class="wf__days">
+      <div class="wf__day" *ngFor="let d of days">
+        <div class="wf__day-head">{{ d.day }}</div>
+
+        <div class="wf__exercise" *ngFor="let ex of d.exercises; let i = index">
+          <span class="wf__exercise-name">{{ ex.name }}</span>
+          <span class="gms-muted">{{ ex.sets }} sets × {{ ex.reps }} reps</span>
+          <button mat-icon-button type="button" (click)="removeExercise(d, i)" matTooltip="Remove">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+
+        <div class="wf__add-row">
+          <input
+            class="wf__input wf__input--name"
+            placeholder="Exercise name"
+            [(ngModel)]="d.draftName"
+            [ngModelOptions]="{ standalone: true }" />
+          <input
+            class="wf__input wf__input--num"
+            type="number"
+            min="1"
+            placeholder="Sets"
+            [(ngModel)]="d.draftSets"
+            [ngModelOptions]="{ standalone: true }" />
+          <input
+            class="wf__input wf__input--num"
+            type="number"
+            min="1"
+            placeholder="Reps"
+            [(ngModel)]="d.draftReps"
+            [ngModelOptions]="{ standalone: true }" />
+          <button mat-icon-button type="button" (click)="addExercise(d)" matTooltip="Add exercise">
+            <mat-icon>add_circle</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" mat-dialog-close>Cancel</button>
+    <button mat-flat-button color="primary" [disabled]="saving">
+      {{ saving ? 'Saving…' : 'Save plan' }}
+    </button>
+  </mat-dialog-actions>
+</form>

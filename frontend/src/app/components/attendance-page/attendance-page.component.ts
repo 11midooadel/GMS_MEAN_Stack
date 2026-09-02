@@ -27,13 +27,13 @@ export class AttendancePageComponent implements OnInit {
 
   checkIn(): void {
     this.svc.checkIn().subscribe(() => {
-      this.snack.open('Checked in ✅', 'OK', { duration: 3000 });
+      this.snack.open('You have checked in successfully.', 'OK', { duration: 3000 });
       this.load();
     });
   }
   checkOut(): void {
     this.svc.checkOut().subscribe(() => {
-      this.snack.open('Checked out 👋', 'OK', { duration: 3000 });
+      this.snack.open('You have checked out successfully.', 'OK', { duration: 3000 });
       this.load();
     });
   }

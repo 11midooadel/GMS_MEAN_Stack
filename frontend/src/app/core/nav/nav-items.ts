@@ -33,21 +33,17 @@ export const NAV_ITEMS: NavItem[] = [
     roles: ['Super Admin', 'super_admin', 'Admin', 'admin']
   },
 
-  // 4. Classes
-  {
-    label: 'Classes',
-    icon: 'fitness_center',
-    route: '/classes',
-    roles: ['Super Admin', 'super_admin', 'Admin', 'admin', 'Member', 'member', 'Trainer', 'trainer']
-  },
+  { label: 'My Members', icon: 'group', route: '/my-members',
+    roles: ['Trainer'] },
 
-  // 5. Workout Plans
-  {
-    label: 'Workout Plans',
-    icon: 'assignment',
-    route: '/workouts',
-    roles: ['Super Admin', 'super_admin', 'Admin', 'admin', 'Member', 'member', 'Trainer', 'trainer']
-  },
+  { label: 'Classes', icon: 'fitness_center', route: '/classes',
+    roles: ['Super Admin', 'Admin', 'Member', 'Trainer'] },
+
+  { label: 'My Classes', icon: 'event_available', route: '/classes/mine',
+    roles: ['Member'] },
+
+  { label: 'Workout Plans', icon: 'assignment', route: '/workouts',
+    roles: ['Super Admin', 'Admin', 'Member', 'Trainer'] },
 
   // 6. Attendance
   {

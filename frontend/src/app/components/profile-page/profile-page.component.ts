@@ -47,7 +47,7 @@ export class ProfilePageComponent implements OnInit {
     const id = this.me._id || this.auth.currentUser!.id;
     this.users.update(id, body).subscribe({
       next: () => {
-        this.snack.open('Profile updated', 'OK', { duration: 3000 });
+        this.snack.open('Profile updated successfully.', 'OK', { duration: 3000 });
         this.saving = false;
       },
       error: () => (this.saving = false),

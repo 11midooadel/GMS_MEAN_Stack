@@ -34,6 +34,10 @@ const routes: Routes = [
       },
 
       // 3. Classes
+      { path: 'my-members',
+        canActivate: [roleGuard], data: { roles: ['Trainer'] },
+        loadChildren: () => import('./features/my-members/my-members.module').then((m) => m.MyMembersModule) },
+
       {
         path: 'classes',
         loadChildren: () =>
