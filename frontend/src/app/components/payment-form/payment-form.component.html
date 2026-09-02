@@ -1,0 +1,61 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Update Payment Status' : 'Record New Payment' }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="save()">
+  <mat-dialog-content class="form-grid" style="display: flex; flex-direction: column; gap: 16px; padding-top: 8px;">
+    
+    <!-- Member Autocomplete (Hidden in Edit mode) -->
+    <mat-form-field appearance="outline" class="w-100" *ngIf="!isEdit">
+      <mat-label>Search Member</mat-label>
+      <input type="text" matInput formControlName="member" [matAutocomplete]="memberAuto">
+      <mat-autocomplete #memberAuto="matAutocomplete" [displayWith]="displayMember" (optionSelected)="onMemberSelected($event.option.value)">
+        <mat-option *ngFor="let m of filteredMembers | async" [value]="m">
+          {{ m.name }} ({{ m.email }})
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100" *ngIf="!isEdit">
+      <mat-label>Link to Subscription</mat-label>
+      <!-- Add the (selectionChange) event here -->
+      <mat-select formControlName="subscriptionId" (selectionChange)="onSubscriptionSelected($event.value)">
+        <mat-option *ngFor="let s of subscriptions" [value]="s._id">
+          Plan: {{ getPlanName(s) }} - Status: {{ s.status }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div style="display: flex; gap: 16px;">
+      <mat-form-field appearance="outline" style="flex: 1;">
+        <mat-label>Amount (EGP)</mat-label>
+        <input matInput type="number" formControlName="amount" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="flex: 1;">
+        <mat-label>Method</mat-label>
+        <mat-select formControlName="paymentMethod">
+          <mat-option *ngFor="let method of methods" [value]="method">{{ method }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Transaction ID (Optional)</mat-label>
+      <input matInput formControlName="transactionId" placeholder="e.g. Stripe/Fawry receipt ID" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status">
+        <mat-option *ngFor="let s of statuses" [value]="s">{{ s }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" mat-dialog-close>Cancel</button>
+    <button mat-flat-button color="primary" type="submit" [disabled]="saving || form.invalid">
+      {{ saving ? 'Saving…' : 'Save Payment' }}
+    </button>
+  </mat-dialog-actions>
+</form>

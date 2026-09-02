@@ -1,19 +1,41 @@
-<header class="pay__head">
-  <h1 class="gms-page-title">Payments</h1>
-  <p class="gms-page-subtitle">Transaction history and payment status.</p>
+<header class="pay__head" style="display: flex; justify-content: space-between; align-items: flex-start;">
+  <div>
+    <h1 class="gms-page-title">Payments</h1>
+    <p class="gms-page-subtitle">Transaction history and payment status.</p>
+  </div>
+
+  <button mat-flat-button color="primary" *ngIf="isAdmin" (click)="openAddPaymentDialog()">
+    + Record Payment
+  </button>
 </header>
+
+<div class="pay__stats" *ngIf="isAdmin && !loading">
+  <div class="gms-card pay__stat-card">
+    <span class="gms-muted">Total Revenue</span>
+    <h3>{{ totalRevenue | currency:'EGP ' }}</h3>
+  </div>
+  <div class="gms-card pay__stat-card">
+    <span class="gms-muted">Completed Payments</span>
+    <h3>{{ completedCount }}</h3>
+  </div>
+  <div class="gms-card pay__stat-card">
+    <span class="gms-muted">Pending Payments</span>
+    <h3>{{ pendingCount }}</h3>
+  </div>
+</div>
 
 <div class="gms-card">
   <div *ngIf="loading" class="pay__loading"><mat-spinner diameter="34"></mat-spinner></div>
 
   <table mat-table [dataSource]="payments" *ngIf="!loading" class="pay__table">
+    <!-- Existing Columns...[cite: 29] -->
     <ng-container matColumnDef="member">
       <th mat-header-cell *matHeaderCellDef>Member</th>
       <td mat-cell *matCellDef="let p">{{ memberName(p) }}</td>
     </ng-container>
     <ng-container matColumnDef="amount">
       <th mat-header-cell *matHeaderCellDef>Amount</th>
-      <td mat-cell *matCellDef="let p">{{ p.amount | currency }}</td>
+      <td mat-cell *matCellDef="let p">{{ p.amount | currency:'EGP ' }}</td>
     </ng-container>
     <ng-container matColumnDef="method">
       <th mat-header-cell *matHeaderCellDef>Method</th>
@@ -22,9 +44,7 @@
     <ng-container matColumnDef="status">
       <th mat-header-cell *matHeaderCellDef>Status</th>
       <td mat-cell *matCellDef="let p">
-        <span class="gms-chip"
-          [class.is-active]="p.status === 'Completed'"
-          [class.is-pending]="p.status === 'Pending'"
+        <span class="gms-chip" [class.is-active]="p.status === 'Completed'" [class.is-pending]="p.status === 'Pending'"
           [class.is-expired]="p.status === 'Failed' || p.status === 'Refunded'">{{ p.status }}</span>
       </td>
     </ng-container>
@@ -32,9 +52,20 @@
       <th mat-header-cell *matHeaderCellDef>Date</th>
       <td mat-cell *matCellDef="let p">{{ p.paymentDate | date }}</td>
     </ng-container>
+
+    <!-- New Actions Column for Admins -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let p" style="text-align: right;">
+        <button mat-stroked-button class="gms-pill" color="primary" (click)="openEditPaymentDialog(p)">Update
+          Status</button>
+      </td>
+    </ng-container>
+
     <tr mat-header-row *matHeaderRowDef="cols"></tr>
     <tr mat-row *matRowDef="let row; columns: cols"></tr>
   </table>
 
-  <p *ngIf="!loading && !payments.length" class="gms-muted">No payments found.</p>
+  <p *ngIf="!loading && !payments.length" class="gms-muted" style="padding: 20px; text-align: center;">No payments
+    found.</p>
 </div>

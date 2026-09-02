@@ -9,6 +9,10 @@ export class SubscriptionsService {
   private readonly base = `${environment.apiUrl}/subscriptions`;
   constructor(private http: HttpClient) {}
 
+  getAll(): Observable<any> {
+    return this.http.get(`${this.base}`);
+  }
+
   create(body: Partial<Subscription>): Observable<any> {
     return this.http.post(`${this.base}/create`, body);
   }

@@ -1,8 +1,13 @@
-<header class="pl__head">
+<header class="pl__head" style="display: flex; justify-content: space-between; align-items: flex-start;">
   <div>
     <h1 class="gms-page-title">Membership Plans</h1>
     <p class="gms-page-subtitle">Choose the plan that fits your goals.</p>
   </div>
+  
+  <!-- Add button for Admins -->
+  <button mat-flat-button color="primary" *ngIf="isAdmin" (click)="openAddPlanDialog()">
+    + Add Plan
+  </button>
 </header>
 
 <div *ngIf="loading" class="pl__loading"><mat-spinner diameter="40"></mat-spinner></div>
@@ -15,14 +20,19 @@
         {{ p.isActive ? 'Active' : 'Disabled' }}
       </span>
     </div>
-    <div class="pl__price"><strong>{{ p.price | currency }}</strong><span>/ {{ p.durationInDays }} days</span></div>
+    <div class="pl__price"><strong>{{ p.price | currency:'EGP ' }}</strong><span>/ {{ p.durationInDays }} days</span></div>
     <p class="gms-muted">{{ p.description }}</p>
+    
     <ul class="pl__features">
       <li *ngFor="let f of p.features"><mat-icon>check_circle</mat-icon> {{ f }}</li>
     </ul>
-    <div class="pl__actions" *ngIf="isAdmin">
-      <button mat-stroked-button class="gms-pill" *ngIf="p.isActive" (click)="disable(p)">Disable</button>
-      <button mat-flat-button color="primary" class="gms-pill" *ngIf="!p.isActive" (click)="enable(p)">Enable</button>
+    
+    <!-- Action buttons container -->
+    <div class="pl__actions" *ngIf="isAdmin" style="display: flex; gap: 8px; flex-wrap: wrap;">
+      <button mat-stroked-button color="primary" class="gms-pill" style="flex: 1;" *ngIf="p.isActive" (click)="disable(p)">Disable</button>
+      <button mat-stroked-button class="gms-pill" style="flex: 1;" *ngIf="!p.isActive" (click)="enable(p)">Enable</button>
+      <button mat-stroked-button color="primary" class="gms-pill" style="flex: 1;" (click)="openEditPlanDialog(p)">Edit</button>
+      <button mat-stroked-button color="warn" class="gms-pill" style="flex: 1;" (click)="deletePlan(p)">Delete</button>
     </div>
   </article>
 </div>

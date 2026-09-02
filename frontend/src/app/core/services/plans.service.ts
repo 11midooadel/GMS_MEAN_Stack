@@ -9,8 +9,10 @@ export class PlansService {
   private readonly base = `${environment.apiUrl}/plans`;
   constructor(private http: HttpClient) {}
 
-  getAll(): Observable<Plan[]> {
-    return this.http.get<Plan[]>(`${this.base}/view`);
+  // Added the includeAll parameter to bypass the active-only filter
+  getAll(includeAll: boolean = false): Observable<any> {
+    const url = includeAll ? `${this.base}/view?all=true` : `${this.base}/view`;
+    return this.http.get<any>(url);
   }
   getById(id: string): Observable<Plan> {
     return this.http.get<Plan>(`${this.base}/view/${id}`);

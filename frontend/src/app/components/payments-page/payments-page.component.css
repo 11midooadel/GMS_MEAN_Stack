@@ -2,3 +2,34 @@
 .pay__loading { display: grid; place-items: center; padding: 30px; }
 .pay__table { width: 100%; background: transparent; }
 table.mat-mdc-table { box-shadow: none; }
+
+.pay__stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.pay__stat-card {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pay__stat-card:nth-child(1) h3 {
+  color: var(--gms-primary);
+}
+
+.pay__stat-card:nth-child(2) h3 {
+  color: #00b894;
+}
+
+.pay__stat-card:nth-child(3) h3 {
+  color: var(--gms-text-muted);
+}
+
+.pay__stat-card h3 {
+  margin: 0;
+  font-size: 2rem;
+}

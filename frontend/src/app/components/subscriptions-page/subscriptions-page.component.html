@@ -1,28 +1,52 @@
-<header class="sub__head">
-  <h1 class="gms-page-title">Subscriptions</h1>
-  <p class="gms-page-subtitle">Your membership status and renewal dates.</p>
+<header class="sub__head" style="display: flex; justify-content: space-between; align-items: flex-start;">
+  <div>
+    <h1 class="gms-page-title">Subscriptions</h1>
+    <p class="gms-page-subtitle">Your membership status and renewal dates.</p>
+  </div>
+  
+  <button mat-flat-button color="primary" *ngIf="isAdmin" (click)="openAddSubscriptionDialog()">
+    + Add Subscription
+  </button>
 </header>
+
+<!-- New: Display the total sum of subscriptions for Admins -->
+<div class="gms-card sub__stat-card" *ngIf="isAdmin && !loading">
+  <span class="gms-muted">Total Subscriptions</span>
+  <h3>{{ subs.length }}</h3>
+</div>
 
 <div *ngIf="loading" class="sub__loading"><mat-spinner diameter="40"></mat-spinner></div>
 
 <div class="sub__grid" *ngIf="!loading">
   <article class="gms-card sub__card" *ngFor="let s of subs">
     <div class="sub__top">
-      <h3>{{ planName(s) }}</h3>
-      <span class="gms-chip"
-        [class.is-active]="s.status === 'Active'"
+      <div>
+        <h3>{{ planName(s) }}</h3>
+        <span *ngIf="isAdmin" class="gms-muted" style="font-size: 0.85rem; display: block; margin-top: 4px;">
+          Member: {{ memberName(s) }}
+        </span>
+      </div>
+      <span class="gms-chip" [class.is-active]="s.status === 'Active'"
         [class.is-pending]="s.status === 'Pending' || s.status === 'Frozen'"
         [class.is-expired]="s.status === 'Expired' || s.status === 'Cancelled'">
         {{ s.status }}
       </span>
     </div>
+
     <div class="sub__dates">
       <div><span class="gms-muted">Start</span><strong>{{ s.startDate | date }}</strong></div>
       <div><span class="gms-muted">End</span><strong>{{ s.endDate | date }}</strong></div>
     </div>
-    <button mat-stroked-button color="warn" class="gms-pill"
-      *ngIf="s.status === 'Active' || s.status === 'Pending'"
-      (click)="cancel(s)">Cancel subscription</button>
+
+    <!-- Updated: Grouping the buttons together -->
+    <div style="display: flex; gap: 12px; margin-top: 16px;">
+      <button mat-stroked-button color="warn" class="gms-pill" *ngIf="s.status === 'Active' || s.status === 'Pending'"
+        (click)="cancel(s)">Cancel</button>
+
+      <!-- New: Edit button only visible to Admins -->
+      <button mat-stroked-button color="primary" class="gms-pill" *ngIf="isAdmin"
+        (click)="openEditSubscriptionDialog(s)">Edit</button>
+    </div>
   </article>
 </div>
 

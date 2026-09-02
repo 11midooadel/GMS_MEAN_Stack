@@ -8,10 +8,27 @@ const createSubscription = async (req, res, next) => {
 		if (!plan || !plan.isActive) {
 			return res.status(400).json({ message: 'Invalid or inactive plan' });
 		}
+		
+		// 2. Check admin role for creating subscriptions for other members
+		if (req.user.role !== "Admin" && req.user.role !== "Super Admin") {
+			return res.status(403).json({ message: "Only admin can create subscriptions for other members" });
+		}
 
-		// 2. Create the subscription (endDate is calculated automatically by the Mongoose pre-validate hook)
+		// 3. Create the subscription (endDate is calculated automatically by the Mongoose pre-validate hook)
 		const subscription = await Subscription.create(req.body);
 		res.status(201).json({ data: subscription });
+	} catch (error) {
+		res.status(400).json({ message: error.message });
+	}
+};
+
+const getAllSubscriptions = async (req, res, next) => {
+	try {
+		const subscriptions = await Subscription.find()
+			.populate('memberId', 'name email') // Joins the member details for the Admin view
+			.populate('planId', 'name features durationInDays price') 
+			.sort({ createdAt: -1 });
+		res.status(200).json({ data: subscriptions });
 	} catch (error) {
 		res.status(400).json({ message: error.message });
 	}
@@ -23,7 +40,7 @@ const getMemberSubscription = async (req, res, next) => {
 		if (req.user.role === "Member" && req.params.memberId !== req.user.userId.toString()) {
 			return res.status(403).json({ message: "You can only view your own subscriptions" });
 		}
-		const subscriptions = await Subscription.find({ memberId: req.params.memberId }).populate('planId', 'name features durationInDays') // Joins the plan details.sort({ createdAt: -1 });
+		const subscriptions = await Subscription.find({ memberId: req.params.memberId }).populate('planId', 'name features durationInDays price') // Joins the plan details.sort({ createdAt: -1 });
 		res.status(200).json({ data: subscriptions });
 	} catch (error) {
 		res.status(400).json({ message: error.message });
@@ -107,6 +124,7 @@ const checkSubscriptionExpiration = async (req, res, next) => {
 
 module.exports = {
 	createSubscription,
+	getAllSubscriptions,
 	getMemberSubscription,
 	updateSubscription,
 	cancelSubscription,

@@ -7,3 +7,18 @@
 .sub__dates { display: flex; gap: 24px; margin: 16px 0; }
 .sub__dates div { display: flex; flex-direction: column; }
 .sub__dates span { font-size: .75rem; }
+
+.sub__stat-card {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+  max-width: 300px;
+}
+
+.sub__stat-card h3 {
+  margin: 0;
+  font-size: 2rem;
+  color: var(--gms-primary);
+}

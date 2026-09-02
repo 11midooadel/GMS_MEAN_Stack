@@ -1,0 +1,59 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Edit subscription' : 'Assign Subscription' }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="save()">
+  <mat-dialog-content class="form-grid" style="display: flex; flex-direction: column; gap: 16px; padding-top: 8px;">
+    
+    <!-- Searchable Member Autocomplete -->
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Member</mat-label>
+      <input type="text" matInput formControlName="member" [matAutocomplete]="memberAuto">
+      <mat-autocomplete #memberAuto="matAutocomplete" [displayWith]="displayMember">
+        <mat-option *ngFor="let m of filteredMembers | async" [value]="m">
+          {{ m.name }} ({{ m.email }})
+        </mat-option>
+      </mat-autocomplete>
+      <mat-error *ngIf="form.get('member')?.hasError('required')">Member is required</mat-error>
+    </mat-form-field>
+
+    <!-- Searchable Plan Autocomplete -->
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Plan</mat-label>
+      <input type="text" matInput formControlName="plan" [matAutocomplete]="planAuto">
+      <mat-autocomplete #planAuto="matAutocomplete" [displayWith]="displayPlan">
+        <mat-option *ngFor="let p of filteredPlans | async" [value]="p">
+          {{ p.name }} ({{ p.durationInDays }} days) - {{ p.price | currency:'EGP ':'symbol':'1.0-0' }}
+        </mat-option>
+      </mat-autocomplete>
+      <mat-error *ngIf="form.get('plan')?.hasError('required')">Plan is required</mat-error>
+    </mat-form-field>
+
+    <!-- Searchable Payment Autocomplete -->
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Search Payment (Optional)</mat-label>
+      <input type="text" matInput formControlName="payment" [matAutocomplete]="paymentAuto">
+      <mat-autocomplete #paymentAuto="matAutocomplete" [displayWith]="displayPayment">
+        <mat-option *ngFor="let p of filteredPayments | async" [value]="p">
+          ({{ p.paymentDate | date }}) {{ p.amount | currency:'EGP ':'symbol':'1.0-0' }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <!-- Status Dropdown (Available in both modes, or you can wrap in *ngIf="isEdit") -->
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status">
+        <mat-option *ngFor="let s of statuses" [value]="s">
+          {{ s }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" mat-dialog-close>Cancel</button>
+    <button mat-flat-button color="primary" type="submit" [disabled]="saving || form.invalid">
+      {{ saving ? 'Saving…' : 'Save' }}
+    </button>
+  </mat-dialog-actions>
+</form>

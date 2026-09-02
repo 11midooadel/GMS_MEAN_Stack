@@ -47,7 +47,7 @@ const getAllWorkoutPlans = async (req, res) => {
             filter = { memberId: { $in: memberIds } };
         }
         const workoutPlans = await WorkoutPlan.find(filter)
-            .populate("memberId", "userName email");
+            .populate("memberId", "name email");
 
         res.status(200).json({
             data: workoutPlans
@@ -65,7 +65,7 @@ const getAllWorkoutPlans = async (req, res) => {
 const getWorkoutPlanById = async (req, res) => {
     try {
         const workoutPlan = await WorkoutPlan.findById(req.params.id)
-            .populate("memberId", "userName email assignedTrainer");
+            .populate("memberId", "name email assignedTrainer");
 
         if (!workoutPlan) {
             return res.status(404).json({

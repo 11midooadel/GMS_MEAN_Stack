@@ -1,0 +1,42 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Edit Plan' : 'Create New Plan' }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="save()">
+  <mat-dialog-content class="form-grid" style="display: flex; flex-direction: column; gap: 16px; padding-top: 8px;">
+    
+    <mat-form-field appearance="outline">
+      <mat-label>Plan Name</mat-label>
+      <input matInput formControlName="name" placeholder="e.g. Pro VIP" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description" rows="2"></textarea>
+    </mat-form-field>
+
+    <div style="display: flex; gap: 16px;">
+      <mat-form-field appearance="outline" style="flex: 1;">
+        <mat-label>Price (EGP)</mat-label>
+        <input matInput type="number" formControlName="price" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="flex: 1;">
+        <mat-label>Duration (Days)</mat-label>
+        <input matInput type="number" formControlName="durationInDays" />
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Features (comma-separated)</mat-label>
+      <textarea matInput formControlName="features" rows="2" placeholder="e.g. Pool access, 2 PT sessions, Locker included"></textarea>
+      <mat-hint>Separate each feature with a comma.</mat-hint>
+    </mat-form-field>
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" mat-dialog-close>Cancel</button>
+    <button mat-flat-button color="primary" [disabled]="saving || form.invalid">
+      {{ saving ? 'Saving…' : 'Save Plan' }}
+    </button>
+  </mat-dialog-actions>
+</form>

@@ -13,7 +13,7 @@ const getAllPlans = async (req, res, next) => {
 	try {
 		// By default, only return active plans. Admins might pass a query like ?all=true
 		const query = req.query.all ? {} : { isActive: true };
-		const plans = await Plan.find(query);
+		const plans = await Plan.find(query).sort({ durationInDays: 1 });
 		res.status(200).json({ message: 'Plans fetched successfully', count: plans.length, data: plans });
 	} catch (error) {
 		res.status(500).json({ message: error.message });

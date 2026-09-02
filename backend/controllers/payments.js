@@ -16,7 +16,21 @@ const createPayment = async (req, res) => {
 			return res.status(403).json({ message: "This subscription does not belong to this member" });
 		}
 
-		const payment = await Payment.create({ memberId, subscriptionId, amount, paymentMethod, transactionId, status: "Completed" });
+		// Build the payload dynamically
+		const paymentData = { 
+            memberId, 
+            subscriptionId, 
+            amount, 
+            paymentMethod, 
+            status: "Completed" 
+        };
+
+        // Only include transactionId if it's valid
+        if (transactionId && transactionId.trim() !== "") {
+            paymentData.transactionId = transactionId;
+        }
+
+		const payment = await Payment.create(paymentData);
 		subscription.paymentId = payment._id;
 		subscription.status = "Active";
 		await subscription.save();
@@ -30,7 +44,7 @@ const createPayment = async (req, res) => {
 
 const getAllPayments = async (req, res) => {
 	try {
-		const payments = await Payment.find().populate("memberId", "userName email").populate("subscriptionId");
+		const payments = await Payment.find().populate("memberId", "name email").populate("subscriptionId");
 		res.status(200).json({ data: payments });
 
 	} catch (err) {
@@ -40,7 +54,7 @@ const getAllPayments = async (req, res) => {
 
 const getPaymentById = async (req, res) => {
 	try {
-		const payment = await Payment.findById(req.params.id).populate("memberId", "userName email").populate("subscriptionId");
+		const payment = await Payment.findById(req.params.id).populate("memberId", "name email").populate("subscriptionId");
 		if (!payment) {
 			return res.status(404).json({ message: "Payment not found" });
 		}
@@ -68,7 +82,7 @@ const getMemberPayments = async (req, res) => {
 
 const getPaymentHistory = async (req, res) => {
 	try {
-		const payments = await Payment.find().populate("memberId", "userName email").populate("subscriptionId").sort({ paymentDate: -1 });
+		const payments = await Payment.find().populate("memberId", "name email").populate("subscriptionId").sort({ paymentDate: -1 });
 		res.status(200).json({ data: payments });
 	} catch (err) {
 		res.status(500).json({ message: err.message });
