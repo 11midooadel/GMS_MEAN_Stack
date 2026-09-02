@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '../../core/services/auth.service';
-import { UsersService, User } from '../../core/services/users.service';
+import { UsersService } from '../../core/services/users.service';
+import { Role, User } from '../../core/models/models';
 import { MemberFormComponent } from '../member-form/member-form.component';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { AttendanceHistoryDialogComponent } from '../attendance-history-dialog/attendance-history-dialog.component';
@@ -17,9 +18,10 @@ export class MemberListComponent implements OnInit {
   users: User[] = [];
   filteredUsers: User[] = [];
   searchTerm = '';
-  currentRoleFilter = '';
+  currentRoleFilter: Role | '' = '';
   pageTitle = 'Users List';
   isLoading = false;
+  cols = ['name', 'email', 'role', 'actions'];
 
   constructor(
     public authService: AuthService,
@@ -35,19 +37,20 @@ export class MemberListComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.data.subscribe((data) => {
-      this.currentRoleFilter = data['role'] || '';
-      this.pageTitle = data['title'] || 'Users List';
+      this.currentRoleFilter = data['roleFilter'] || '';
+      this.pageTitle = this.currentRoleFilter === 'Trainer' ? 'Trainers' : 'Users List';
       this.loadUsers();
     });
   }
 
   loadUsers(): void {
     this.isLoading = true;
-    this.usersService.getUsers(this.currentRoleFilter).subscribe({
-      next: (res: any) => {
-        const list: User[] = Array.isArray(res) ? res : (res.data || res.users || []);
-        this.users = list;
-        this.filterList();
+    this.usersService.getAll().subscribe({
+      next: (all) => {
+        this.users = this.currentRoleFilter
+          ? all.filter((u) => u.role === this.currentRoleFilter)
+          : all;
+        this.applySearch();
         this.isLoading = false;
       },
       error: () => {
@@ -57,8 +60,8 @@ export class MemberListComponent implements OnInit {
   }
 
   applySearch(): void {
-    const q = this.search.toLowerCase().trim();
-    this.filtered = !q
+    const q = this.searchTerm.toLowerCase().trim();
+    this.filteredUsers = !q
       ? this.users
       : this.users.filter(
           (u) => u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q)
@@ -79,15 +82,27 @@ export class MemberListComponent implements OnInit {
     });
   }
 
+  openAddModal(): void {
+    if (!this.canEdit) return;
+
+    const dialogRef = this.dialog.open(MemberFormComponent, {
+      width: '500px',
+      data: { defaultRole: this.currentRoleFilter || undefined },
+    });
+
+    dialogRef.afterClosed().subscribe((updated) => {
+      if (updated) {
+        this.loadUsers();
+      }
+    });
+  }
+
   openEditModal(user: User): void {
     if (!this.canEdit) return;
 
     const dialogRef = this.dialog.open(MemberFormComponent, {
       width: '500px',
-      data: {
-        user: { ...user },
-        role: user.role
-      }
+      data: { user: { ...user } },
     });
 
     dialogRef.afterClosed().subscribe((updated) => {
@@ -110,7 +125,7 @@ export class MemberListComponent implements OnInit {
       .afterClosed()
       .subscribe((confirmed) => {
         if (!confirmed) return;
-        this.usersSvc.delete(user._id!).subscribe(() => this.load());
+        this.usersService.delete(user._id!).subscribe(() => this.loadUsers());
       });
   }
 }

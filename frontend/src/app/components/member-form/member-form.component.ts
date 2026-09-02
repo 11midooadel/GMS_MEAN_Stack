@@ -78,7 +78,6 @@ export class MemberFormComponent implements OnInit {
   }
 }
 
-  onCancel(): void {
-    this.dialogRef.close();
-  }
-}
+  // onCancel(): void {
+  //   this.dialogRef.close();
+  // }

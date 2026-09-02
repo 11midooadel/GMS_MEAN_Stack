@@ -1,3 +1,6 @@
+.list__loading { display: grid; place-items: center; padding: 40px; }
+.list__empty { text-align: center; padding: 30px; }
+
 .list-header {
   display: flex;
   justify-content: space-between;
