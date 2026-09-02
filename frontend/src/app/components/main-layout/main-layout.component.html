@@ -1,5 +1,5 @@
 <mat-sidenav-container class="layout">
-  <!-- SIDEBAR -->
+  
   <mat-sidenav
     #sidenav
     class="layout__sidenav"
@@ -9,7 +9,6 @@
     <app-sidebar (navigate)="closeIfHandset()"></app-sidebar>
   </mat-sidenav>
 
-  <!-- CONTENT -->
   <mat-sidenav-content class="layout__content">
     <app-navbar (menuClick)="toggle()"></app-navbar>
 
@@ -18,3 +17,4 @@
     </main>
   </mat-sidenav-content>
 </mat-sidenav-container>
+

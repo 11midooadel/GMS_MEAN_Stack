@@ -1,62 +1,178 @@
 .auth {
-  min-height: 100vh;
-  display: grid;
-  grid-template-columns: 1.05fr 1fr;
-  background: var(--gms-bg-gradient);
+min-height: 100vh;
+display: grid;
+grid-template-columns: 1.05fr 1fr;
+background: var(--gms-bg-gradient);
 }
 
-/* Hero */
 .auth__hero {
-  position: relative;
-  margin: 16px;
-  border-radius: 22px;
-  padding: 34px 32px;
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  gap: 10px;
-  background:
-    linear-gradient(160deg, rgba(10, 10, 12, 0.82), rgba(255, 106, 26, 0.32)),
-    linear-gradient(160deg, #1a1a1d, #0a0a0b);
-  box-shadow: var(--gms-shadow);
-  overflow: hidden;
-}
-.auth__hero-badge {
-  position: absolute;
-  top: 24px; left: 32px;
-  display: inline-flex; align-items: center; gap: 5px;
-  font-weight: 600;
-  font-size: 0.82rem;
-  background: rgba(255,255,255,0.16);
-  padding: 6px 12px; border-radius: var(--gms-radius-pill);
-  backdrop-filter: blur(6px);
-}
-.auth__hero h1 {
-  font-family: var(--gms-font-display);
-  text-transform: uppercase;
-  font-size: 2rem; font-weight: 700; line-height: 1.12; margin: 0;
-}
-.auth__hero p { margin: 0; opacity: 0.9; max-width: 34ch; font-size: 0.85rem; }
-.auth__hero-stat {
-  display: inline-flex; align-items: center; gap: 7px;
-  margin-top: 6px;
-  background: rgba(255,255,255,0.14);
-  padding: 8px 14px; border-radius: var(--gms-radius-pill);
-  width: fit-content; font-size: 0.78rem;
+position: relative;
+margin: 16px;
+border-radius: 22px;
+padding: 34px 32px;
+color: #fff;
+display: flex;
+flex-direction: column;
+justify-content: flex-end;
+align-items: flex-start;
+gap: 10px;
+overflow: hidden;
+isolation: isolate;
+background-image:
+linear-gradient(
+180deg,
+rgba(0, 0, 0, 0.15) 0%,
+rgba(0, 0, 0, 0.35) 45%,
+rgba(0, 0, 0, 0.78) 100%
+),
+url('/assets/gym-hero.jpg');
+background-size: cover;
+background-position: center;
+background-repeat: no-repeat;
+box-shadow: var(--gms-shadow);
 }
 
-/* Panel */
-.auth__panel { display: grid; place-items: center; padding: 28px; }
-.auth__form-wrap { width: min(340px, 100%); }
-.auth__form-wrap h2 { font-size: 1.35rem; font-weight: 600; margin: 0 0 3px; }
-.auth__field { width: 100%; margin-top: 8px; }
-.auth__submit { width: 100%; height: 42px; margin-top: 6px; font-size: 0.85rem; }
-.auth__switch { margin-top: 14px; text-align: center; color: var(--gms-text-muted); font-size: 0.82rem; }
-.auth__switch a { color: var(--gms-primary-dark); font-weight: 600; text-decoration: none; }
+.auth__hero-badge {
+position: absolute;
+top: 24px;
+left: 32px;
+width: 48px;
+height: 48px;
+display: grid;
+place-items: center;
+border-radius: 12px;
+overflow: hidden;
+background: rgba(255, 255, 255, 0.16);
+backdrop-filter: blur(6px);
+-webkit-backdrop-filter: blur(6px);
+}
+
+.auth__hero-badge img {
+width: 100%;
+height: 100%;
+object-fit: contain;
+display: block;
+}
+
+.auth__hero h1 {
+position: relative;
+z-index: 1;
+font-family: var(--gms-font-display);
+text-transform: uppercase;
+font-size: 2rem;
+font-weight: 700;
+line-height: 1.12;
+margin: 0;
+max-width: 500px;
+}
+
+.auth__hero p {
+position: relative;
+z-index: 1;
+margin: 0;
+opacity: 0.9;
+max-width: 34ch;
+font-size: 0.85rem;
+line-height: 1.5;
+}
+
+.auth__hero-stat {
+position: relative;
+z-index: 1;
+display: inline-flex;
+align-items: center;
+gap: 7px;
+margin-top: 6px;
+background: rgba(255, 255, 255, 0.14);
+padding: 8px 14px;
+border-radius: var(--gms-radius-pill);
+width: fit-content;
+font-size: 0.78rem;
+backdrop-filter: blur(5px);
+-webkit-backdrop-filter: blur(5px);
+}
+
+.auth__hero-stat strong {
+font-weight: 700;
+}
+
+.auth__panel {
+display: grid;
+place-items: center;
+padding: 28px;
+}
+
+.auth__form-wrap {
+width: min(340px, 100%);
+}
+
+.auth__form-wrap h2 {
+font-size: 1.35rem;
+font-weight: 600;
+margin: 0 0 3px;
+}
+
+.auth__field {
+width: 100%;
+margin-top: 8px;
+}
+
+.auth__submit {
+width: 100%;
+height: 42px;
+margin-top: 6px;
+font-size: 0.85rem;
+}
+
+.auth__switch {
+margin-top: 14px;
+text-align: center;
+color: var(--gms-text-muted);
+font-size: 0.82rem;
+}
+
+.auth__switch a {
+color: var(--gms-primary-dark);
+font-weight: 600;
+text-decoration: none;
+}
 
 @media (max-width: 880px) {
-  .auth { grid-template-columns: 1fr; }
-  .auth__hero { min-height: 200px; margin: 10px; padding: 22px; }
-  .auth__hero h1 { font-size: 1.6rem; }
+.auth {
+grid-template-columns: 1fr;
+}
+
+.auth__hero {
+min-height: 300px;
+margin: 10px;
+padding: 22px;
+border-radius: 18px;
+}
+
+.auth__hero-badge {
+top: 20px;
+left: 22px;
+}
+
+.auth__hero h1 {
+font-size: 1.6rem;
+}
+
+.auth__panel {
+padding: 24px 20px 32px;
+}
+}
+
+@media (max-width: 500px) {
+.auth__hero {
+min-height: 270px;
+}
+
+.auth__hero h1 {
+font-size: 1.45rem;
+}
+
+.auth__hero p {
+font-size: 0.8rem;
+}
 }

@@ -1,9 +1,10 @@
 <header class="navbar">
+ 
   <button
     mat-icon-button
     class="navbar__menu"
-    (click)="menuClick.emit()"
-    aria-label="Toggle menu">
+    aria-label="Toggle menu"
+    (click)="menuClick.emit()">
     <mat-icon>menu</mat-icon>
   </button>
 
@@ -12,27 +13,36 @@
     <input type="text" placeholder="Search members, classes, plans…" />
   </div>
 
-  <span class="gms-spacer"></span>
+  <span class="navbar__spacer"></span>
 
-  <button mat-icon-button matTooltip="Notifications" aria-label="Notifications">
-    <mat-icon [matBadge]="3" matBadgeColor="warn" matBadgeSize="small">notifications_none</mat-icon>
+  <button
+    mat-icon-button
+    class="navbar__user-avatar"
+    [matMenuTriggerFor]="userMenu"
+    aria-label="User menu">
+    <div class="avatar">{{ initials }}</div>
   </button>
 
-  <button class="navbar__user" mat-button [matMenuTriggerFor]="userMenu">
-    <span class="navbar__avatar">{{ initials }}</span>
-    <span class="navbar__user-info">
-      <span class="navbar__user-name">{{ user?.name }}</span>
-      <span class="navbar__user-role">{{ user?.role }}</span>
-    </span>
-    <mat-icon>expand_more</mat-icon>
+  <mat-menu #userMenu="matMenu" class="user-menu-panel">
+  <div class="user-menu__info">
+    <div class="user-menu__avatar">{{ initials }}</div>
+    <div class="user-menu__details">
+      <div class="user-menu__name">{{ user?.name }}</div>
+      <div class="user-menu__email">{{ user?.email }}</div>
+      <div class="user-menu__role">{{ user?.role }}</div>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <button mat-menu-item routerLink="/profile">
+    <mat-icon>person</mat-icon>
+    <span>Profile</span>
   </button>
 
-  <mat-menu #userMenu="matMenu">
-    <a mat-menu-item routerLink="/profile">
-      <mat-icon>person</mat-icon><span>My Profile</span>
-    </a>
-    <button mat-menu-item (click)="logout()">
-      <mat-icon>logout</mat-icon><span>Log out</span>
-    </button>
-  </mat-menu>
+  <button mat-menu-item (click)="logout()">
+    <mat-icon>logout</mat-icon>
+    <span>Logout</span>
+  </button>
+</mat-menu>
 </header>
