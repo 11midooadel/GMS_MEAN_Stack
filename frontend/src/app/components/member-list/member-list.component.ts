@@ -17,9 +17,9 @@ import { HealthHistoryDialogComponent } from '../health-history-dialog/health-hi
 export class MemberListComponent implements OnInit {
   users: User[] = [];
   filteredUsers: User[] = [];
-  searchTerm = '';
+  searchTerm: string = '';
   currentRoleFilter: Role | '' = '';
-  pageTitle = 'Users List';
+  pageTitle = 'Members';
   isLoading = false;
   cols = ['name', 'email', 'role', 'actions'];
 
@@ -36,20 +36,38 @@ export class MemberListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // 1. Listen for route data (role filters)
     this.route.data.subscribe((data) => {
       this.currentRoleFilter = data['roleFilter'] || '';
-      this.pageTitle = this.currentRoleFilter === 'Trainer' ? 'Trainers' : 'Users List';
+      this.pageTitle = this.currentRoleFilter === 'Trainer' ? 'Trainers' : 'Members';
       this.loadUsers();
+    });
+
+    // 2. Listen to query params from the top Navbar search bar (?q=...)
+    this.route.queryParams.subscribe((params) => {
+      if (params['q'] !== undefined) {
+        this.searchTerm = params['q'] || '';
+        this.applySearch();
+      }
     });
   }
 
   loadUsers(): void {
     this.isLoading = true;
     this.usersService.getAll().subscribe({
-      next: (all) => {
-        this.users = this.currentRoleFilter
-          ? all.filter((u) => u.role === this.currentRoleFilter)
-          : all;
+      next: (all: User[]) => {
+        const list = Array.isArray(all) ? all : ((all as any).data || (all as any).users || []);
+
+        if (this.currentRoleFilter) {
+          this.users = list.filter(
+            (u: any) => (u.role || '').toLowerCase() === this.currentRoleFilter.toLowerCase()
+          );
+        } else {
+          // Strictly show only users with 'member' role
+          this.users = list.filter(
+            (u: any) => (u.role || '').toLowerCase() === 'member'
+          );
+        }
         this.applySearch();
         this.isLoading = false;
       },
@@ -60,12 +78,17 @@ export class MemberListComponent implements OnInit {
   }
 
   applySearch(): void {
-    const q = this.searchTerm.toLowerCase().trim();
-    this.filteredUsers = !q
-      ? this.users
-      : this.users.filter(
-          (u) => u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q)
-        );
+    const q = (this.searchTerm || '').toLowerCase().trim();
+    if (!q) {
+      this.filteredUsers = [...this.users];
+      return;
+    }
+
+    this.filteredUsers = this.users.filter((u) => {
+      const nameMatch = (u.name || (u as any).username || '').toLowerCase().includes(q);
+      const emailMatch = (u.email || '').toLowerCase().includes(q);
+      return nameMatch || emailMatch;
+    });
   }
 
   viewAttendance(user: User): void {
@@ -87,7 +110,7 @@ export class MemberListComponent implements OnInit {
 
     const dialogRef = this.dialog.open(MemberFormComponent, {
       width: '500px',
-      data: { defaultRole: this.currentRoleFilter || undefined },
+      data: { defaultRole: this.currentRoleFilter || 'member' },
     });
 
     dialogRef.afterClosed().subscribe((updated) => {
