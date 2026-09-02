@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
-import { UsersService, User } from '../../core/services/users.service';
+import { UsersService } from '../../core/services/users.service';
+import { User } from '../../core/models/models';
 
 @Component({
   selector: 'app-home',
@@ -41,7 +42,7 @@ export class HomeComponent implements OnInit {
 
   loadDashboardData(): void {
     this.isLoading = true;
-    this.usersService.getUsers().subscribe({
+    this.usersService.getAll().subscribe({
       next: (res: any) => {
         const users: User[] = Array.isArray(res) ? res : (res.data || res.users || []);
 

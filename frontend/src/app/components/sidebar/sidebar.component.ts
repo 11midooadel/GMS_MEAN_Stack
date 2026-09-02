@@ -12,6 +12,8 @@ export class SidebarComponent implements OnInit {
 
   constructor(private auth: AuthService) {}
 
+  ngOnInit(): void {}
+
   get items(): NavItem[] {
     return navForRole(this.auth.role);
   }

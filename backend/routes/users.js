@@ -5,7 +5,6 @@ const auth = require("../middleware/auth");
 const authorizeRoles = require("../middleware/roles");
 const router = express.Router();
 const userController = require('../controllers/users');
-const auth = require('../middleware/auth');
 const roles = require('../middleware/roles');
 
 // PUBLIC ENDPOINTS
