@@ -79,7 +79,7 @@
 }
 
 .sidebar__link {
-  width: 246px;
+  width: 43px;
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -93,7 +93,8 @@
   white-space: nowrap;
   transition:
     background 0.15s ease,
-    color 0.15s ease;
+    color 0.15s ease,
+    width 0.25s ease;
 }
 
 .sidebar__link mat-icon {
@@ -114,6 +115,10 @@
 .sidebar:hover .sidebar__link span {
   opacity: 1;
   transform: translateX(0);
+}
+
+.sidebar:hover .sidebar__link {
+  width: 246px;
 }
 
 .sidebar__link:hover {

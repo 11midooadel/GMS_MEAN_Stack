@@ -28,7 +28,6 @@ export const NAV_ITEMS: NavItem[] = [
   //   route: '/dashboard/member',
   //   roles: ['member', 'member']
   // },
-  // 2. Members Management
   {
     label: 'Members',
     icon: 'group',
@@ -36,7 +35,6 @@ export const NAV_ITEMS: NavItem[] = [
     roles: ['super_admin', 'super_admin', 'admin', 'admin']
   },
 
-  // 3. Trainers Management
   {
     label: 'Trainers',
     icon: 'sports',
@@ -56,15 +54,13 @@ export const NAV_ITEMS: NavItem[] = [
   { label: 'Workout Plans', icon: 'assignment', route: '/workouts',
     roles: ['super_admin', 'admin', 'member', 'trainer'] },
 
-  // 6. Health Records
   {
-    label: 'Attendance',
-    icon: 'how_to_reg',
-    route: '/attendance',
-    roles: ['super_admin', 'super_admin', 'admin', 'admin', 'member', 'member', 'trainer', 'trainer']
+    label: 'Health Records',
+    icon: 'monitor_heart',
+    route: '/health',
+    roles: ['super_admin', 'super_admin', 'admin', 'admin', 'member', 'member']
   },
 
-  // 7. Membership Plans
   {
     label: 'Membership Plans',
     icon: 'card_membership',
@@ -72,7 +68,6 @@ export const NAV_ITEMS: NavItem[] = [
     roles: ['super_admin', 'super_admin', 'admin', 'admin', 'member', 'member']
   },
 
-  // 8. Subscriptions
   {
     label: 'Subscriptions',
     icon: 'autorenew',
@@ -80,7 +75,6 @@ export const NAV_ITEMS: NavItem[] = [
     roles: ['super_admin', 'super_admin', 'admin', 'admin', 'member', 'member']
   },
 
-  // 9. Payments
   {
     label: 'Payments',
     icon: 'payments',
@@ -88,13 +82,13 @@ export const NAV_ITEMS: NavItem[] = [
     roles: ['super_admin', 'super_admin', 'admin', 'admin']
   },
 
-  // 10. Attendance
   {
-    label: 'Health Records',
-    icon: 'monitor_heart',
-    route: '/health',
-    roles: ['super_admin', 'super_admin', 'admin', 'admin', 'member', 'member']
+    label: 'Attendance',
+    icon: 'how_to_reg',
+    route: '/attendance',
+    roles: ['super_admin', 'super_admin', 'admin', 'admin', 'member', 'member', 'trainer', 'trainer']
   },
+
 ];
 
 /** Filters navigation items for the given role safely with case-insensitive check */
