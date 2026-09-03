@@ -24,7 +24,7 @@ export class AttendancePageComponent implements OnInit {
   records: Attendance[] = [];
 
   /** Admin/Super Admin: everyone's history for the selected role, newest first. */
-  roleView: 'Member' | 'Trainer' = 'Member';
+  roleView: 'member' | 'trainer' = 'member';
   adminRows: AdminAttendanceRow[] = [];
   adminCols = ['name', 'checkIn', 'checkOut'];
 
@@ -36,14 +36,14 @@ export class AttendancePageComponent implements OnInit {
   ) {}
 
   get isAdmin(): boolean {
-    return this.auth.hasRole('Admin', 'Super Admin');
+    return this.auth.hasRole('admin', 'super_admin');
   }
 
   ngOnInit(): void {
     this.isAdmin ? this.loadAdminView() : this.load();
   }
 
-  setRoleView(role: 'Member' | 'Trainer'): void {
+  setRoleView(role: 'member' | 'trainer'): void {
     if (this.roleView === role) return;
     this.roleView = role;
     this.loadAdminView();

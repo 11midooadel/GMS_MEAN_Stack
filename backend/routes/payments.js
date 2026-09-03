@@ -5,11 +5,11 @@ const authorizeRoles = require("../middleware/roles");
 
 const router = express.Router();
 
-router.post("/create", auth, authorizeRoles("Admin", "Super Admin"), createPayment);
-router.get("/", auth, authorizeRoles("Admin", "Super Admin"), getAllPayments);
-router.get("/history", auth, authorizeRoles("Admin", "Super Admin"), getPaymentHistory);
+router.post("/create", auth, authorizeRoles("admin", "super_admin"), createPayment);
+router.get("/", auth, authorizeRoles("admin", "super_admin"), getAllPayments);
+router.get("/history", auth, authorizeRoles("admin", "super_admin"), getPaymentHistory);
 router.get("/member/:memberId", auth, getMemberPayments);
-router.patch("/:id/status", auth, authorizeRoles("Admin", "Super Admin"), updatePaymentStatus);
+router.patch("/:id/status", auth, authorizeRoles("admin", "super_admin"), updatePaymentStatus);
 router.get("/:id", auth, getPaymentById);
 
 

@@ -10,7 +10,7 @@ const createSubscription = async (req, res, next) => {
 		}
 		
 		// 2. Check admin role for creating subscriptions for other members
-		if (req.user.role !== "Admin" && req.user.role !== "Super Admin") {
+		if (req.user.role.toLowerCase() !== "admin" && req.user.role.toLowerCase() !== "super admin" && req.user.role.toLowerCase() !== "super_admin") {
 			return res.status(403).json({ message: "Only admin can create subscriptions for other members" });
 		}
 
@@ -37,7 +37,7 @@ const getAllSubscriptions = async (req, res, next) => {
 const getMemberSubscription = async (req, res, next) => {
 	try {
 		// Find all subscriptions for a specific member, sort by most recent first
-		if (req.user.role === "Member" && req.params.memberId !== req.user.userId.toString()) {
+		if (req.user.role.toLowerCase() === "member" && req.params.memberId !== req.user.userId.toString()) {
 			return res.status(403).json({ message: "You can only view your own subscriptions" });
 		}
 		const subscriptions = await Subscription.find({ memberId: req.params.memberId }).populate('planId', 'name features durationInDays price') // Joins the plan details.sort({ createdAt: -1 });
@@ -66,7 +66,7 @@ const cancelSubscription = async (req, res, next) => {
 			{ new: true }
 		);
 		if (!subscription) return res.status(404).json({ message: 'Subscription not found' });
-		if (req.user.role === "Member" && subscription.memberId.toString() !== req.user.userId.toString()) {
+		if (req.user.role.toLowerCase() === "member" && subscription.memberId.toString() !== req.user.userId.toString()) {
 			return res.status(403).json({ message: "You can only cancel your own subscription" });
 		}
 		res.status(200).json({ message: 'Subscription cancelled', data: subscription });
@@ -82,7 +82,7 @@ const checkSubscriptionStatus = async (req, res, next) => {
 		const subscription = await Subscription.findById(req.params.id);
 		if (!subscription) return res.status(404).json({ message: 'Subscription not found' });
 
-		if (req.user.role === "Member" && subscription.memberId.toString() !== req.user.userId.toString()) {
+		if (req.user.role === "member" && subscription.memberId.toString() !== req.user.userId.toString()) {
 			return res.status(403).json({ message: "You can only check your own subscription" });
 		}
 
@@ -105,7 +105,7 @@ const checkSubscriptionExpiration = async (req, res, next) => {
 		const subscription = await Subscription.findById(req.params.id);
 		if (!subscription) return res.status(404).json({ message: 'Subscription not found' });
 
-		if (req.user.role === "Member" && subscription.memberId.toString() !== req.user.userId.toString()) {
+		if (req.user.role === "member" && subscription.memberId.toString() !== req.user.userId.toString()) {
 			return res.status(403).json({ message: "You can only check your own subscription" });
 		}
 		// Calculate days remaining

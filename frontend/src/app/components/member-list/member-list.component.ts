@@ -29,13 +29,13 @@ export class MemberListComponent implements OnInit {
   ) {}
 
   get canEdit(): boolean {
-    return this.authService.hasRole('Admin', 'Super Admin');
+    return this.authService.hasRole('admin', 'super_admin');
   }
 
   ngOnInit(): void {
     this.route.data.subscribe((data) => {
       this.currentRoleFilter = data['roleFilter'] || '';
-      this.pageTitle = this.currentRoleFilter === 'Trainer' ? 'Trainers' : 'Members';
+      this.pageTitle = this.currentRoleFilter === 'trainer' ? 'Trainers' : 'Members';
       this.loadUsers();
     });
 
@@ -53,7 +53,7 @@ export class MemberListComponent implements OnInit {
     this.usersService.getAll().subscribe({
       next: (all) => {
         // No route filter (the base /members page) shows Members only.
-        this.users = all.filter((u) => u.role === (this.currentRoleFilter || 'Member'));
+        this.users = all.filter((u) => u.role === (this.currentRoleFilter || 'member'));
         this.applySearch();
         this.isLoading = false;
       },
@@ -78,7 +78,7 @@ export class MemberListComponent implements OnInit {
     if (!this.canEdit) return;
     const dialogRef = this.dialog.open(MemberFormComponent, {
       width: '500px',
-      data: { defaultRole: this.currentRoleFilter || 'Member' },
+      data: { defaultRole: this.currentRoleFilter || 'member' },
     });
     dialogRef.afterClosed().subscribe((updated) => {
       if (updated) this.loadUsers();

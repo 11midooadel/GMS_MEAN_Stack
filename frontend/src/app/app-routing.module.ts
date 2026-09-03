@@ -17,26 +17,28 @@ const routes: Routes = [
     children: [
       // 1. Dashboard (Restricted strictly to Super Admin)
       {
-  path: 'dashboard',
-  canActivate: [roleGuard],
-  data: { roles: ['super_admin', 'Super Admin', 'admin', 'Admin'] },
-  loadChildren: () =>
-    import('./features/dashboard/dashboard.module').then((m) => m.DashboardModule),
-},
+        path: 'dashboard',
+        canActivate: [roleGuard],
+        data: { roles: ['super_admin', 'super_admin', 'admin', 'admin'] },
+        loadChildren: () =>
+          import('./features/dashboard/dashboard.module').then((m) => m.DashboardModule),
+      },
 
       // 2. Members Management
       {
         path: 'members',
         canActivate: [roleGuard],
-        data: { roles: ['super_admin', 'Super Admin', 'admin', 'Admin', 'trainer', 'Trainer'] },
+        data: { roles: ['super_admin', 'super_admin', 'admin', 'admin', 'trainer', 'trainer'] },
         loadChildren: () =>
           import('./features/members/members.module').then((m) => m.MembersModule),
       },
 
       // 3. Classes
-      { path: 'my-members',
-        canActivate: [roleGuard], data: { roles: ['Trainer'] },
-        loadChildren: () => import('./features/my-members/my-members.module').then((m) => m.MyMembersModule) },
+      {
+        path: 'my-members',
+        canActivate: [roleGuard], data: { roles: ['trainer'] },
+        loadChildren: () => import('./features/my-members/my-members.module').then((m) => m.MyMembersModule)
+      },
 
       {
         path: 'classes',
@@ -54,6 +56,8 @@ const routes: Routes = [
       // 5. Attendance — every role checks in/out or (for Admin) reviews history here.
       {
         path: 'attendance',
+        canActivate: [roleGuard],
+        data: { roles: ['super_admin', 'admin', 'trainer', 'member'] },
         loadChildren: () =>
           import('./features/attendance/attendance.module').then((m) => m.AttendanceModule),
       },
@@ -76,7 +80,7 @@ const routes: Routes = [
       {
         path: 'payments',
         canActivate: [roleGuard],
-        data: { roles: ['super_admin', 'Super Admin', 'admin', 'Admin'] },
+        data: { roles: ['super_admin', 'super_admin', 'admin', 'admin'] },
         loadChildren: () =>
           import('./features/payments/payments.module').then((m) => m.PaymentsModule),
       },
@@ -106,4 +110,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

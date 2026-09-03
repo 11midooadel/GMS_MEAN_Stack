@@ -93,7 +93,7 @@ const login = async (req, res) => {
 
     // const normalizedRole =
     //   user.role?.trim().toLowerCase() === "admin"
-    //     ? "Admin"
+    //     ? "admin"
     //     : user.role;
 
     const token = jwt.sign(

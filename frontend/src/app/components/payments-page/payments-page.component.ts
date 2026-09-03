@@ -28,7 +28,7 @@ export class PaymentsPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.isAdmin = this.auth.hasRole('Admin', 'Super Admin');
+    this.isAdmin = this.auth.hasRole('admin', 'super_admin');
     // If not admin, remove the 'actions' column so members don't see an empty column
     if (!this.isAdmin) {
       this.cols = ['member', 'amount', 'method', 'status', 'date'];
@@ -84,7 +84,7 @@ export class PaymentsPageComponent implements OnInit {
       return (this.auth.currentUser as any).name || 'Me';
     }
     
-    return 'Member';
+    return 'member';
   }
 
   openAddPaymentDialog(): void {

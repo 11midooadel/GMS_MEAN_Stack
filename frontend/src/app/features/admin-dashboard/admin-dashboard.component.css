@@ -331,6 +331,10 @@
 
 /* Weekly chart */
 
+.weekly-card {
+  margin-top: 20px;
+}
+
 .chart-area {
   display: flex;
   margin-top: 25px;

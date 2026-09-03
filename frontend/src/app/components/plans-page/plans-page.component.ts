@@ -20,7 +20,7 @@ export class PlansPageComponent implements OnInit {
     private dialog: MatDialog // Inject MatDialog
   ) {}
 
-  get isAdmin() { return this.auth.hasRole('Admin', 'Super Admin'); } // Checks admin role[cite: 23]
+  get isAdmin() { return this.auth.hasRole('admin', 'super_admin'); } // Checks admin role[cite: 23]
 
   ngOnInit(): void { this.load(); }
 

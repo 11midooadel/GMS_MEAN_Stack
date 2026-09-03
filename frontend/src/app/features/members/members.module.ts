@@ -7,7 +7,7 @@ import { AttendanceHistoryDialogComponent } from '../../components/attendance-hi
 
 const routes: Routes = [
   { path: '', component: MemberListComponent },
-  { path: 'trainers', component: MemberListComponent, data: { roleFilter: 'Trainer' } },
+  { path: 'trainers', component: MemberListComponent, data: { roleFilter: 'trainer' } },
 ];
 
 @NgModule({

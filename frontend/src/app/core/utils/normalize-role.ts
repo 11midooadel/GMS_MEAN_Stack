@@ -1,6 +1,6 @@
 import { Role } from '../models/models';
 
-const CANONICAL_ROLES: Role[] = ['Super Admin', 'Admin', 'Member', 'Trainer'];
+const CANONICAL_ROLES: Role[] = ['super_admin', 'admin', 'member', 'trainer'];
 
 /**
  * Maps any casing/formatting variant of a role (e.g. "admin", "super_admin",

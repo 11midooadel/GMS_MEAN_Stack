@@ -45,7 +45,7 @@ export class HealthPageComponent implements OnInit {
   ) {}
 
   get isAdmin(): boolean {
-    return this.auth.hasRole('Admin', 'Super Admin');
+    return this.auth.hasRole('admin', 'super_admin');
   }
 
   ngOnInit(): void {
@@ -57,7 +57,7 @@ export class HealthPageComponent implements OnInit {
     this.loading = true;
     this.usersSvc.getAll().subscribe({
       next: (all) => {
-        const candidates = all.filter((u) => u.role === 'Member');
+        const candidates = all.filter((u) => u.role === 'member');
         if (!candidates.length) {
           this.members = [];
           this.loading = false;

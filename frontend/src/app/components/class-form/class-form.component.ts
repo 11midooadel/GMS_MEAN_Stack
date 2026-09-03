@@ -41,7 +41,7 @@ export class ClassFormComponent implements OnInit {
   ) {}
 
   get isAdmin(): boolean {
-    return this.auth.hasRole('Admin', 'Super Admin');
+    return this.auth.hasRole('admin', 'super_admin');
   }
 
   ngOnInit(): void {
@@ -49,7 +49,7 @@ export class ClassFormComponent implements OnInit {
     this.form.controls.trainer.setValidators(Validators.required);
     this.form.controls.trainer.updateValueAndValidity();
     this.usersSvc.getAll().subscribe((all) => {
-      this.trainers = all.filter((u) => u.role === 'Trainer');
+      this.trainers = all.filter((u) => u.role === 'trainer');
     });
   }
 

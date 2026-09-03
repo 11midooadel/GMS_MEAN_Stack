@@ -31,7 +31,7 @@ export class PaymentFormComponent implements OnInit {
     amount: [{ value: this.data.payment?.amount ?? '', disabled: this.isEdit }, [Validators.required, Validators.min(0)]],
     paymentMethod: [{ value: this.data.payment?.paymentMethod ?? 'Cash', disabled: this.isEdit }, Validators.required],
     transactionId: [{ value: this.data.payment?.transactionId ?? '', disabled: this.isEdit }],
-    status: [this.data.payment?.status ?? 'Completed', Validators.required]
+    status: [this.data.payment?.status ?? 'Pending', Validators.required]
   });
 
   constructor(
@@ -53,7 +53,7 @@ export class PaymentFormComponent implements OnInit {
   loadMembers(): void {
     this.usersSvc.getAll().subscribe((res: any) => {
       const users = res.data || res;
-      this.members = users.filter((u: User) => u.role === 'Member');
+      this.members = users.filter((u: User) => u.role === 'member');
       this.filteredMembers = this.form.get('member')!.valueChanges.pipe(
         startWith(''),
         map(value => (typeof value === 'string' ? value : value?.name || '')),

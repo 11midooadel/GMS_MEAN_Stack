@@ -22,7 +22,7 @@ export class SubscriptionsPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void { 
-    this.isAdmin = this.auth.currentUser?.role === 'Admin' || this.auth.currentUser?.role === 'Super Admin';
+    this.isAdmin = this.auth.currentUser?.role === 'admin' || this.auth.currentUser?.role === 'super_admin';
     this.load(); 
   }
 

@@ -58,7 +58,7 @@ const getClassMembers = async (req, res) => {
             return res.status(404).json({ message: "Class not found" });
         }
         
-        if (req.user.role !== "Admin" && req.user.role !== "Super Admin" && classData.trainer.toString() !== req.user.userId) {
+        if (req.user.role !== "admin" && req.user.role !== "super_admin" && classData.trainer.toString() !== req.user.userId) {
             return res.status(403).json({ message: "You are not the trainer of this class" });
         }
 

@@ -59,7 +59,7 @@ export class SubscriptionFormComponent implements OnInit {
     // 1. Load Members
     this.usersSvc.getAll().subscribe((res: any) => {
       const users = res.data || res;
-      this.members = users.filter((u: User) => u.role === 'Member');
+      this.members = users.filter((u: User) => u.role === 'member');
       this.setupMemberFilter();
       this.patchInitialMember();
     });

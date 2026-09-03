@@ -6,10 +6,10 @@ const authorizeRoles = require('../middleware/roles');
 const router = express.Router();
 
 // REMINDER: We should add Admin Auth middleware here
-router.post("/create", auth, authorizeRoles("Super Admin", "Admin"), createSubscription); // Should trigger after successful payment
-router.get('/', auth, authorizeRoles("Super Admin", "Admin"), getAllSubscriptions);
+router.post("/create", auth, authorizeRoles("super_admin", "admin"), createSubscription); // Should trigger after successful payment
+router.get('/', auth, authorizeRoles("super_admin", "admin"), getAllSubscriptions);
 router.get('/member/:memberId', auth, getMemberSubscription);
-router.put('/:id', auth, authorizeRoles("Super Admin", "Admin"), updateSubscription);
+router.put('/:id', auth, authorizeRoles("super_admin", "admin"), updateSubscription);
 router.post('/:id/cancel', auth, cancelSubscription);
 router.get('/:id/status', auth, checkSubscriptionStatus);
 router.get('/:id/expiration', auth, checkSubscriptionExpiration); // Used for dashboard alerts (e.g., "5 days left to renew!")

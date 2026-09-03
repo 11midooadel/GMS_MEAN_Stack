@@ -24,17 +24,17 @@ export class WorkoutListComponent implements OnInit {
   /** Admins and Trainers can edit/delete — the backend already scopes the list
    *  a Trainer sees to only their own assigned members' plans. */
   get canManage(): boolean {
-    return this.auth.hasRole('Admin', 'Super Admin', 'Trainer');
+    return this.auth.hasRole('admin', 'super_admin', 'trainer');
   }
 
   get isAdmin(): boolean {
-    return this.auth.hasRole('Admin', 'Super Admin');
+    return this.auth.hasRole('admin', 'super_admin');
   }
   get isTrainer(): boolean {
-    return this.auth.hasRole('Trainer');
+    return this.auth.hasRole('trainer');
   }
   get isMember(): boolean {
-    return this.auth.hasRole('Member');
+    return this.auth.hasRole('member');
   }
 
   ngOnInit(): void {
@@ -43,7 +43,7 @@ export class WorkoutListComponent implements OnInit {
 
   load(): void {
     this.loading = true;
-    const req = this.auth.hasRole('Member')
+    const req = this.auth.hasRole('member')
       ? this.svc.byMember(this.auth.currentUser!.id)
       : this.svc.getAll();
 
@@ -58,7 +58,7 @@ export class WorkoutListComponent implements OnInit {
   }
 
   memberName(p: WorkoutPlan): string {
-    return typeof p.memberId === 'object' ? (p.memberId as User).name : 'Member';
+    return typeof p.memberId === 'object' ? (p.memberId as User).name : 'member';
   }
 
   /** Returns null until the backend populates `memberId.assignedTrainer` — safe to show conditionally. */

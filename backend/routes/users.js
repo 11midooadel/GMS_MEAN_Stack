@@ -16,7 +16,7 @@ router.use(auth);
 
 router.get('/profile', userController.getProfile || userController.getUserById);
 router.get('/', userController.getAllUsers || userController.getUsers);
-router.get("/my-members", auth, authorizeRoles("Trainer"), getMyMembers);
+router.get("/my-members", auth, authorizeRoles("trainer"), getMyMembers);
 router.get('/:id', userController.getUserById);
 router.put('/:id', userController.updateUser);
 router.delete('/:id', userController.deleteUser);

@@ -12,8 +12,7 @@ import { Role, User } from '../../core/models/models';
   styleUrls: ['./member-form.component.css']
 })
 export class MemberFormComponent implements OnInit {
-  /** A plain Admin can only promote/demote between Member and Trainer — granting Admin/Super Admin is Super Admin-only. Set in ngOnInit. */
-  roles: Role[] = ['Member', 'Trainer'];
+  roles: Role[] = ['member', 'trainer', 'admin'];
   trainers: User[] = [];
   saving = false;
   isEdit = !!this.data.user;
@@ -22,7 +21,7 @@ export class MemberFormComponent implements OnInit {
     name: [this.data.user?.name ?? '', Validators.required],
     email: [this.data.user?.email ?? '', [Validators.required, Validators.email]],
     password: ['', this.data.user ? [] : [Validators.required, Validators.minLength(6)]],
-    role: [this.data.user?.role ?? (this.data.defaultRole ?? 'Member'), Validators.required],
+    role: [this.data.user?.role ?? (this.data.defaultRole ?? 'member'), Validators.required],
     assignedTrainer: [this.currentTrainerId()],
   });
 
@@ -36,11 +35,11 @@ export class MemberFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.auth.hasRole('Super Admin')) {
-      this.roles = ['Member', 'Trainer', 'Admin', 'Super Admin'];
+    if (this.auth.hasRole('super_admin')) {
+      this.roles = ['member', 'trainer', 'admin', 'super_admin'];
     }
     this.users.getAll().subscribe((all) => {
-      this.trainers = all.filter((u) => u.role === 'Trainer');
+      this.trainers = all.filter((u) => u.role === 'trainer');
     });
   }
 
@@ -57,7 +56,7 @@ export class MemberFormComponent implements OnInit {
     const v = this.form.value;
     const body: any = { name: v.name, email: v.email, role: v.role };
     if (v.password) body.password = v.password;
-    if (v.role === 'Member') body.assignedTrainer = v.assignedTrainer || null;
+    if (v.role === 'member') body.assignedTrainer = v.assignedTrainer || null;
 
     const req = this.isEdit
       ? this.users.update(this.data.user!._id!, body)

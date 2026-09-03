@@ -4,7 +4,7 @@ const User = require("../models/users");
 const createWorkoutPlan = async (req, res) => {
     try {
         const { name, description, days } = req.body;
-        const memberId = req.user.role === "Member" ? req.user.userId : req.body.memberId;
+        const memberId = req.user.role === "member" ? req.user.userId : req.body.memberId;
 
         if (!memberId || !name || !days) {
             return res.status(400).json({
@@ -12,7 +12,7 @@ const createWorkoutPlan = async (req, res) => {
             });
         }
 
-        if (req.user.role === "Trainer") {
+        if (req.user.role === "trainer") {
             const member = await User.findById(memberId).select("assignedTrainer");
             if (!member || !member.assignedTrainer || member.assignedTrainer.toString() !== req.user.userId.toString()) {
                 return res.status(403).json({ message: "You are not allowed to create a plan for this member" });
@@ -41,7 +41,7 @@ const createWorkoutPlan = async (req, res) => {
 const getAllWorkoutPlans = async (req, res) => {
     try {
         let filter = {};
-        if (req.user.role === "Trainer") {
+        if (req.user.role === "trainer") {
             const members = await User.find({ assignedTrainer: req.user.userId }).select("_id");
             const memberIds = members.map(m => m._id);
             filter = { memberId: { $in: memberIds } };
@@ -73,10 +73,10 @@ const getWorkoutPlanById = async (req, res) => {
             });
         }
 
-        if (req.user.role === "Member" && workoutPlan.memberId._id.toString() !== req.user.userId.toString()) {
+        if (req.user.role === "member" && workoutPlan.memberId._id.toString() !== req.user.userId.toString()) {
             return res.status(403).json({ message: "You are not allowed to view this workout plan" });
         }
-        if (req.user.role === "Trainer" && (!workoutPlan.memberId.assignedTrainer || workoutPlan.memberId.assignedTrainer.toString() !== req.user.userId.toString())) {
+        if (req.user.role === "trainer" && (!workoutPlan.memberId.assignedTrainer || workoutPlan.memberId.assignedTrainer.toString() !== req.user.userId.toString())) {
             return res.status(403).json({ message: "You are not allowed to view this workout plan" });
         }
 
@@ -95,10 +95,10 @@ const getWorkoutPlanById = async (req, res) => {
 // Get Workout Plans by Member
 const getMemberWorkoutPlans = async (req, res) => {
     try {
-        if (req.user.role === "Member" && req.params.memberId !== req.user.userId.toString()) {
+        if (req.user.role === "member" && req.params.memberId !== req.user.userId.toString()) {
             return res.status(403).json({ message: "You are not allowed to view these workout plans" });
         }
-        if (req.user.role === "Trainer") {
+        if (req.user.role === "trainer") {
             const member = await User.findById(req.params.memberId).select("assignedTrainer");
             if (!member || !member.assignedTrainer || member.assignedTrainer.toString() !== req.user.userId.toString()) {
                 return res.status(403).json({ message: "You are not allowed to view these workout plans" });
@@ -131,16 +131,16 @@ const updateWorkoutPlan = async (req, res) => {
             });
         }
 
-        if (req.user.role === "Member" && existing.memberId.toString() !== req.user.userId.toString()) {
+        if (req.user.role === "member" && existing.memberId.toString() !== req.user.userId.toString()) {
             return res.status(403).json({ message: "You are not allowed to modify this workout plan" });
         }
-        if (req.user.role === "Trainer") {
+        if (req.user.role === "trainer") {
             const member = await User.findById(existing.memberId).select("assignedTrainer");
             if (!member || !member.assignedTrainer || member.assignedTrainer.toString() !== req.user.userId.toString()) {
                 return res.status(403).json({ message: "You are not allowed to modify this workout plan" });
             }
         }
-        if (req.user.role === "Member") delete req.body.memberId;
+        if (req.user.role === "member") delete req.body.memberId;
 
         const workoutPlan = await WorkoutPlan.findByIdAndUpdate(
             req.params.id,
@@ -172,10 +172,10 @@ const deleteWorkoutPlan = async (req, res) => {
             });
         }
 
-        if (req.user.role === "Member" && workoutPlan.memberId.toString() !== req.user.userId.toString()) {
+        if (req.user.role === "member" && workoutPlan.memberId.toString() !== req.user.userId.toString()) {
             return res.status(403).json({ message: "You are not allowed to delete this workout plan" });
         }
-        if (req.user.role === "Trainer") {
+        if (req.user.role === "trainer") {
             const member = await User.findById(workoutPlan.memberId).select("assignedTrainer");
             if (!member || !member.assignedTrainer || member.assignedTrainer.toString() !== req.user.userId.toString()) {
                 return res.status(403).json({ message: "You are not allowed to delete this workout plan" });

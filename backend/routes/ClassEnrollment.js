@@ -5,10 +5,10 @@ const authorizeRoles = require("../middleware/roles");
 
 const router = express.Router();
 
-router.post("/:classId/enroll", auth, authorizeRoles("Member"), enrollInClass);
-router.get("/my-classes", auth, authorizeRoles("Member"), getMemberClasses);
+router.post("/:classId/enroll", auth, authorizeRoles("member"), enrollInClass);
+router.get("/my-classes", auth, authorizeRoles("member"), getMemberClasses);
 router.get("/:classId/members", auth, getClassMembers);
-router.delete("/:classId/leave", auth, authorizeRoles("Member"), leaveClass);
+router.delete("/:classId/leave", auth, authorizeRoles("member"), leaveClass);
 
 
 module.exports = router;

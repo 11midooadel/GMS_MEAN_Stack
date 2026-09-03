@@ -13,16 +13,27 @@ export const NAV_ITEMS: NavItem[] = [
   {
     label: 'Dashboard',
     icon: 'grid_view',
-    route: '/dashboard',
-    roles: ['Super Admin', 'super_admin', 'Admin', 'admin']
+    route: '/dashboard/admin',
+    roles: ['super_admin', 'admin']
   },
-
+  // {
+  //   label: 'Dashboard',
+  //   icon: 'grid_view',
+  //   route: '/dashboard/trainer',
+  //   roles: ['trainer', 'trainer']
+  // },
+  // {
+  //   label: 'Dashboard',
+  //   icon: 'grid_view',
+  //   route: '/dashboard/member',
+  //   roles: ['member', 'member']
+  // },
   // 2. Members Management
   {
     label: 'Members',
     icon: 'group',
     route: '/members',
-    roles: ['Super Admin', 'super_admin', 'Admin', 'admin']
+    roles: ['super_admin', 'super_admin', 'admin', 'admin']
   },
 
   // 3. Trainers Management
@@ -30,27 +41,27 @@ export const NAV_ITEMS: NavItem[] = [
     label: 'Trainers',
     icon: 'sports',
     route: '/members/trainers',
-    roles: ['Super Admin', 'super_admin', 'Admin', 'admin']
+    roles: ['super_admin', 'super_admin', 'admin', 'admin']
   },
 
   { label: 'My Members', icon: 'group', route: '/my-members',
-    roles: ['Trainer'] },
+    roles: ['trainer'] },
 
   { label: 'Classes', icon: 'fitness_center', route: '/classes',
-    roles: ['Super Admin', 'Admin', 'Member', 'Trainer'] },
+    roles: ['super_admin', 'admin', 'member', 'trainer'] },
 
   { label: 'My Classes', icon: 'event_available', route: '/classes/mine',
-    roles: ['Member'] },
+    roles: ['member'] },
 
   { label: 'Workout Plans', icon: 'assignment', route: '/workouts',
-    roles: ['Super Admin', 'Admin', 'Member', 'Trainer'] },
+    roles: ['super_admin', 'admin', 'member', 'trainer'] },
 
   // 6. Health Records
   {
-    label: 'Health Records',
-    icon: 'monitor_heart',
-    route: '/health',
-    roles: ['Super Admin', 'super_admin', 'Admin', 'admin', 'Member', 'member']
+    label: 'Attendance',
+    icon: 'how_to_reg',
+    route: '/attendance',
+    roles: ['super_admin', 'super_admin', 'admin', 'admin', 'member', 'member', 'trainer', 'trainer']
   },
 
   // 7. Membership Plans
@@ -58,7 +69,7 @@ export const NAV_ITEMS: NavItem[] = [
     label: 'Membership Plans',
     icon: 'card_membership',
     route: '/plans',
-    roles: ['Super Admin', 'super_admin', 'Admin', 'admin', 'Member', 'member']
+    roles: ['super_admin', 'super_admin', 'admin', 'admin', 'member', 'member']
   },
 
   // 8. Subscriptions
@@ -66,7 +77,7 @@ export const NAV_ITEMS: NavItem[] = [
     label: 'Subscriptions',
     icon: 'autorenew',
     route: '/subscriptions',
-    roles: ['Super Admin', 'super_admin', 'Admin', 'admin', 'Member', 'member']
+    roles: ['super_admin', 'super_admin', 'admin', 'admin', 'member', 'member']
   },
 
   // 9. Payments
@@ -74,15 +85,15 @@ export const NAV_ITEMS: NavItem[] = [
     label: 'Payments',
     icon: 'payments',
     route: '/payments',
-    roles: ['Super Admin', 'super_admin', 'Admin', 'admin']
+    roles: ['super_admin', 'super_admin', 'admin', 'admin']
   },
 
   // 10. Attendance
   {
-    label: 'Attendance',
-    icon: 'how_to_reg',
-    route: '/attendance',
-    roles: ['Super Admin', 'super_admin', 'Admin', 'admin', 'Member', 'member', 'Trainer', 'trainer']
+    label: 'Health Records',
+    icon: 'monitor_heart',
+    route: '/health',
+    roles: ['super_admin', 'super_admin', 'admin', 'admin', 'member', 'member']
   },
 ];
 

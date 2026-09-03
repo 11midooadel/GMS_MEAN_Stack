@@ -6,7 +6,7 @@
             const { name, description, days, startTime, duration, capacity, location, trainer } = req.body;
 
             // A Trainer always creates their own class; Admin/Super Admin must pick who teaches it.
-            const trainerId = req.user.role === "Trainer" ? req.user.userId : trainer;
+            const trainerId = req.user.role === "trainer" ? req.user.userId : trainer;
             if (!trainerId) {
                 return res.status(400).json({ message: "A trainer must be selected for this class" });
             }
@@ -47,7 +47,7 @@
                 return res.status(404).json({ message: "Class not found" });
             }
 
-            if (req.user.role !== "Admin" && req.user.role !== "Super Admin" && classData.trainer.toString() !== req.user.userId) {
+            if (req.user.role !== "admin" && req.user.role !== "super_admin" && classData.trainer.toString() !== req.user.userId) {
                 return res.status(403).json({ message: "You are not allowed to update this class" });
             }
 
@@ -71,7 +71,7 @@
                 return res.status(404).json({ message: "Class not found" });
             }
             
-            if (req.user.role !== "Admin" && req.user.role !== "Super Admin" && classData.trainer.toString() !== req.user.userId) {
+            if (req.user.role !== "admin" && req.user.role !== "super_admin" && classData.trainer.toString() !== req.user.userId) {
                 return res.status(403).json({ message: "You are not allowed to delete this class" });
             }
 

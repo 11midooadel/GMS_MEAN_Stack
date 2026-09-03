@@ -5,9 +5,9 @@ const authorizeRoles = require("../middleware/roles");
 
 const router = express.Router();
 
-router.post("/create", auth, authorizeRoles("Trainer", "Admin", "Super Admin"), createClass);
+router.post("/create", auth, authorizeRoles("trainer"), createClass);
 router.get("/getAllClasses", auth, getAllClasses);
-router.get("/My-classes", auth, authorizeRoles("Trainer"), getTrainerClasses);
+router.get("/My-classes", auth, authorizeRoles("trainer"), getTrainerClasses);
 router.get("/:id", auth, getClassById);
 router.put("/:id", auth, updateClass);
 router.delete("/:id", auth, deleteClass);

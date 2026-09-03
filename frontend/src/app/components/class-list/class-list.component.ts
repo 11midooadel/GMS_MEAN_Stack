@@ -31,9 +31,9 @@ export class ClassListComponent implements OnInit {
     private route: ActivatedRoute
   ) {}
 
-  get isMember() { return this.auth.hasRole('Member'); }
-  get isTrainer() { return this.auth.hasRole('Trainer'); }
-  get isAdmin() { return this.auth.hasRole('Admin', 'Super Admin'); }
+  get isMember() { return this.auth.hasRole('member'); }
+  get isTrainer() { return this.auth.hasRole('trainer'); }
+  get isAdmin() { return this.auth.hasRole('admin', 'super_admin'); }
 
   /** 'teaching' = trainer viewing classes they teach; 'enrolled' = member's "My Classes"; 'browse' = everyone else browsing all classes. */
   get viewMode(): ViewMode {
@@ -77,7 +77,7 @@ export class ClassListComponent implements OnInit {
   }
 
   trainerName(c: GymClass): string {
-    return typeof c.trainer === 'object' ? (c.trainer as User).name : 'Trainer';
+    return typeof c.trainer === 'object' ? (c.trainer as User).name : 'trainer';
   }
 
   /** Only the trainer who created the class (or an Admin) may edit/delete it — mirrors the backend's ownership check. */

@@ -5,7 +5,7 @@ import { environment } from '../../../environments/environment';
 import { Role, User } from '../models/models';
 import { normalizeRole } from '../utils/normalize-role';
 
-/** The backend stores role casing inconsistently (e.g. "member" vs "Member") — normalize on the way in. */
+/** The backend stores role casing inconsistently (e.g. "member" vs "member") — normalize on the way in. */
 const withNormalizedRole = (u: User): User => ({ ...u, role: (normalizeRole(u.role) ?? u.role) as Role });
 
 @Injectable({ providedIn: 'root' })

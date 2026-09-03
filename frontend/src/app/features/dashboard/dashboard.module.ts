@@ -13,19 +13,19 @@ const routes: Routes = [
     path: 'admin',
     component: AdminDashboardComponent,
     canActivate: [roleGuard],
-    data: { roles: ['Admin', 'Super Admin'] },
+    data: { roles: ['admin', 'super_admin'] },
   },
   {
     path: 'trainer',
     component: TrainerDashboardComponent,
     canActivate: [roleGuard],
-    data: { roles: ['Trainer'] },
+    data: { roles: ['trainer'] },
   },
   {
     path: 'member',
     component: MemberDashboardComponent,
     canActivate: [roleGuard],
-    data: { roles: ['Member'] },
+    data: { roles: ['member'] },
   },
   {
     path: '',

@@ -5,9 +5,9 @@ const authorizeRoles = require("../middleware/roles");
 
 const router = express.Router();
 
-router.post("/create", auth, authorizeRoles("Admin", "Super Admin", "Member"), createHealthRecord);
+router.post("/create", auth, authorizeRoles("admin", "super_admin", "member"), createHealthRecord);
 router.get("/member/:memberId/history", auth, getMemberHealthHistory);
-router.put("/:id", auth, authorizeRoles("Admin", "Super Admin", "Member"), updateHealthRecord);
-router.delete("/:id", auth, authorizeRoles("Admin", "Super Admin", "Member"), deleteHealthRecord);
+router.put("/:id", auth, authorizeRoles("admin", "super_admin", "member"), updateHealthRecord);
+router.delete("/:id", auth, authorizeRoles("admin", "super_admin", "member"), deleteHealthRecord);
 
 module.exports = router;

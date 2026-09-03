@@ -6,7 +6,7 @@ const authorizeRoles = require("../middleware/roles");
 const router = express.Router();
 
 router.post("/create", auth, createWorkoutPlan);
-router.get("/", auth, authorizeRoles("Admin", "Super Admin", "Trainer"), getAllWorkoutPlans);
+router.get("/", auth, authorizeRoles("admin", "super_admin", "trainer"), getAllWorkoutPlans);
 router.get("/member/:memberId", auth, getMemberWorkoutPlans);
 router.get("/:id", auth, getWorkoutPlanById);
 router.put("/:id", auth, updateWorkoutPlan);

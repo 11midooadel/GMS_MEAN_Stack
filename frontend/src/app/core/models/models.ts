@@ -1,5 +1,5 @@
 /* Type definitions mirroring the backend Mongoose schemas. */
-export type Role = 'Super Admin' | 'Admin' | 'Member' | 'Trainer';
+export type Role = 'super_admin' | 'admin' | 'member' | 'trainer';
 
 export interface User {
   _id?: string;

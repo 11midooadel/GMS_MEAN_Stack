@@ -4,7 +4,7 @@
     <p class="gms-page-subtitle">Manage your gym members and their roles.</p>
   </div>
   <button *ngIf="canEdit" mat-flat-button color="primary" class="gms-pill" (click)="openAddModal()">
-    <mat-icon>add</mat-icon> Add {{ currentRoleFilter === 'Trainer' ? 'Trainer' : 'Member' }}
+    <mat-icon>add</mat-icon> Add {{ currentRoleFilter === 'trainer' ? 'trainer' : 'member' }}
   </button>
 </header>
 
@@ -40,7 +40,9 @@
 
     <ng-container matColumnDef="role">
       <th mat-header-cell *matHeaderCellDef>Role</th>
-      <td mat-cell *matCellDef="let u"><span class="gms-chip is-active">{{ u.role }}</span></td>
+      <td mat-cell *matCellDef="let u">
+        <span class="gms-chip is-active">{{ u.role }}</span>
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="actions">

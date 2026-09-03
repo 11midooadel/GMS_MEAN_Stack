@@ -8,6 +8,6 @@ const router = express.Router();
 router.get("/check-in", auth, checkIn);
 router.get("/check-out", auth, checkOut);
 router.get("/my-attendance", auth, getMyAttendance);
-router.get("/user/:userId", auth, authorizeRoles("Admin", "Super Admin"), getAttendanceByUser);
+router.get("/user/:userId", auth, authorizeRoles("admin", "super_admin"), getAttendanceByUser);
 
 module.exports = router;
