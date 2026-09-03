@@ -16,3 +16,25 @@
 .att__loading { display: grid; place-items: center; padding: 30px; }
 .att__table { width: 100%; background: transparent; }
 table.mat-mdc-table { box-shadow: none; }
+
+.att__switcher {
+  display: inline-flex;
+  background: var(--gms-card-soft);
+  border: 1px solid var(--gms-border);
+  border-radius: var(--gms-radius-pill);
+  padding: 4px;
+  gap: 4px;
+  margin-bottom: 18px;
+}
+.att__switch-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 8px 22px;
+  border-radius: var(--gms-radius-pill);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--gms-text-muted);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+.att__switch-btn.is-active { background: var(--gms-primary); color: #fff; }

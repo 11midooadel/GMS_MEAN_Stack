@@ -51,11 +51,9 @@ const routes: Routes = [
           import('./features/workouts/workouts.module').then((m) => m.WorkoutsModule),
       },
 
-      // 5. Attendance
+      // 5. Attendance — every role checks in/out or (for Admin) reviews history here.
       {
         path: 'attendance',
-        canActivate: [roleGuard],
-        data: { roles: ['super_admin', 'Super Admin', 'admin', 'Admin', 'trainer', 'Trainer'] },
         loadChildren: () =>
           import('./features/attendance/attendance.module').then((m) => m.AttendanceModule),
       },

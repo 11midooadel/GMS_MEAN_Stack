@@ -3,9 +3,15 @@
 
     const createClass = async (req, res) => {
         try {
-            const { name, description, days, startTime, duration, capacity, location } = req.body;
+            const { name, description, days, startTime, duration, capacity, location, trainer } = req.body;
 
-            const newClass = await Class.create({ name, description, trainer: req.user.userId, days, startTime, duration, capacity, location });
+            // A Trainer always creates their own class; Admin/Super Admin must pick who teaches it.
+            const trainerId = req.user.role === "Trainer" ? req.user.userId : trainer;
+            if (!trainerId) {
+                return res.status(400).json({ message: "A trainer must be selected for this class" });
+            }
+
+            const newClass = await Class.create({ name, description, trainer: trainerId, days, startTime, duration, capacity, location });
             res.status(201).json({ message: "Class created successfully", class: newClass });
         } catch (error) {
             res.status(500).json({ message: "Error creating class", error: error.message });

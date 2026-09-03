@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UsersService } from '../../core/services/users.service';
+import { AuthService } from '../../core/services/auth.service';
 import { Role, User } from '../../core/models/models';
 
 @Component({
@@ -11,7 +12,8 @@ import { Role, User } from '../../core/models/models';
   styleUrls: ['./member-form.component.css']
 })
 export class MemberFormComponent implements OnInit {
-  roles: Role[] = ['Member', 'Trainer', 'Admin', 'Super Admin'];
+  /** A plain Admin can only promote/demote between Member and Trainer — granting Admin/Super Admin is Super Admin-only. Set in ngOnInit. */
+  roles: Role[] = ['Member', 'Trainer'];
   trainers: User[] = [];
   saving = false;
   isEdit = !!this.data.user;
@@ -27,12 +29,16 @@ export class MemberFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private users: UsersService,
+    private auth: AuthService,
     private snack: MatSnackBar,
     private ref: MatDialogRef<MemberFormComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { user?: User; defaultRole?: Role }
   ) {}
 
   ngOnInit(): void {
+    if (this.auth.hasRole('Super Admin')) {
+      this.roles = ['Member', 'Trainer', 'Admin', 'Super Admin'];
+    }
     this.users.getAll().subscribe((all) => {
       this.trainers = all.filter((u) => u.role === 'Trainer');
     });
@@ -51,24 +57,18 @@ export class MemberFormComponent implements OnInit {
     const v = this.form.value;
     const body: any = { name: v.name, email: v.email, role: v.role };
     if (v.password) body.password = v.password;
+    if (v.role === 'Member') body.assignedTrainer = v.assignedTrainer || null;
 
     const req = this.isEdit
       ? this.users.update(this.data.user!._id!, body)
       : this.users.create(body);
 
     req.subscribe({
-      next: (result: any) => {
-        const memberId = this.isEdit ? this.data.user!._id! : result?.user?._id;
-        if (v.role === 'Member' && v.assignedTrainer && memberId) {
-          this.users.assignTrainer(memberId, v.assignedTrainer).subscribe({
-            next: () => this.finish(),
-            error: () => this.finish(),
-          });
-        } else {
-          this.finish();
-        }
+      next: () => this.finish(),
+      error: (err) => {
+        this.saving = false;
+        this.snack.open(err?.error?.message || 'Failed to save user.', 'OK', { duration: 4000 });
       },
-      error: () => (this.saving = false),
     });
   }
 
@@ -77,7 +77,3 @@ export class MemberFormComponent implements OnInit {
     this.ref.close(true);
   }
 }
-
-  // onCancel(): void {
-  //   this.dialogRef.close();
-  // }

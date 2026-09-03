@@ -18,7 +18,13 @@
 .wk__days {
   display: flex; flex-direction: column; gap: 8px;
   max-height: 260px; overflow-y: auto; padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gms-border) transparent;
 }
+.wk__days::-webkit-scrollbar { width: 6px; }
+.wk__days::-webkit-scrollbar-track { background: transparent; }
+.wk__days::-webkit-scrollbar-thumb { background: var(--gms-border); border-radius: 10px; }
+.wk__days::-webkit-scrollbar-thumb:hover { background: var(--gms-text-muted); }
 .wk__day { padding: 10px 12px; border-radius: 12px; background: var(--gms-card-soft); font-size: 0.85rem; }
 .wk__day-head { display: flex; justify-content: space-between; }
 .wk__exercise {

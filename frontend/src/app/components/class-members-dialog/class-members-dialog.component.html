@@ -10,7 +10,7 @@
         <span class="members__name">{{ m.name }}</span>
         <span class="members__email">{{ m.email }}</span>
       </span>
-      <button mat-icon-button (click)="createPlan(m)" matTooltip="Create workout plan">
+      <button *ngIf="canCreatePlan(m)" mat-icon-button (click)="createPlan(m)" matTooltip="Create workout plan">
         <mat-icon>assignment_add</mat-icon>
       </button>
     </li>

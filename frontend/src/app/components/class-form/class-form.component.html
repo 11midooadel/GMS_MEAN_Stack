@@ -12,6 +12,13 @@
       <input matInput formControlName="description" />
     </mat-form-field>
 
+    <mat-form-field appearance="outline" *ngIf="isAdmin">
+      <mat-label>Trainer</mat-label>
+      <mat-select formControlName="trainer">
+        <mat-option *ngFor="let t of trainers" [value]="t._id">{{ t.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
     <mat-form-field appearance="outline">
       <mat-label>Days</mat-label>
       <mat-select formControlName="days" multiple>

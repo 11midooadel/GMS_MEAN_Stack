@@ -6,8 +6,6 @@ import { UsersService } from '../../core/services/users.service';
 import { Role, User } from '../../core/models/models';
 import { MemberFormComponent } from '../member-form/member-form.component';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
-import { AttendanceHistoryDialogComponent } from '../attendance-history-dialog/attendance-history-dialog.component';
-import { HealthHistoryDialogComponent } from '../health-history-dialog/health-history-dialog.component';
 
 @Component({
   selector: 'app-member-list',
@@ -17,33 +15,31 @@ import { HealthHistoryDialogComponent } from '../health-history-dialog/health-hi
 export class MemberListComponent implements OnInit {
   users: User[] = [];
   filteredUsers: User[] = [];
-  searchTerm: string = '';
+  searchTerm = '';
   currentRoleFilter: Role | '' = '';
   pageTitle = 'Members';
   isLoading = false;
   cols = ['name', 'email', 'role', 'actions'];
 
   constructor(
-    public authService: AuthService,
+    private authService: AuthService,
     private usersService: UsersService,
     private route: ActivatedRoute,
     private dialog: MatDialog
   ) {}
 
   get canEdit(): boolean {
-    const role = this.authService.role?.toString().toLowerCase().replace(/\s+/g, '_');
-    return role === 'super_admin' || role === 'admin';
+    return this.authService.hasRole('Admin', 'Super Admin');
   }
 
   ngOnInit(): void {
-    // 1. Listen for route data (role filters)
     this.route.data.subscribe((data) => {
       this.currentRoleFilter = data['roleFilter'] || '';
       this.pageTitle = this.currentRoleFilter === 'Trainer' ? 'Trainers' : 'Members';
       this.loadUsers();
     });
 
-    // 2. Listen to query params from the top Navbar search bar (?q=...)
+    // Syncs with the top navbar's global search box (?q=...)
     this.route.queryParams.subscribe((params) => {
       if (params['q'] !== undefined) {
         this.searchTerm = params['q'] || '';
@@ -55,83 +51,48 @@ export class MemberListComponent implements OnInit {
   loadUsers(): void {
     this.isLoading = true;
     this.usersService.getAll().subscribe({
-      next: (all: User[]) => {
-        const list = Array.isArray(all) ? all : ((all as any).data || (all as any).users || []);
-
-        if (this.currentRoleFilter) {
-          this.users = list.filter(
-            (u: any) => (u.role || '').toLowerCase() === this.currentRoleFilter.toLowerCase()
-          );
-        } else {
-          // Strictly show only users with 'member' role
-          this.users = list.filter(
-            (u: any) => (u.role || '').toLowerCase() === 'member'
-          );
-        }
+      next: (all) => {
+        // No route filter (the base /members page) shows Members only.
+        this.users = all.filter((u) => u.role === (this.currentRoleFilter || 'Member'));
         this.applySearch();
         this.isLoading = false;
       },
-      error: () => {
-        this.isLoading = false;
-      }
+      error: () => (this.isLoading = false),
     });
   }
 
   applySearch(): void {
-    const q = (this.searchTerm || '').toLowerCase().trim();
-    if (!q) {
-      this.filteredUsers = [...this.users];
-      return;
-    }
-
-    this.filteredUsers = this.users.filter((u) => {
-      const nameMatch = (u.name || (u as any).username || '').toLowerCase().includes(q);
-      const emailMatch = (u.email || '').toLowerCase().includes(q);
-      return nameMatch || emailMatch;
-    });
+    const q = this.searchTerm.toLowerCase().trim();
+    this.filteredUsers = !q
+      ? this.users
+      : this.users.filter(
+          (u) => u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q)
+        );
   }
 
-  viewAttendance(user: User): void {
-    this.dialog.open(AttendanceHistoryDialogComponent, {
-      width: '420px',
-      data: { userId: user._id!, userName: user.name },
-    });
-  }
-
-  viewHealth(user: User): void {
-    this.dialog.open(HealthHistoryDialogComponent, {
-      width: '440px',
-      data: { memberId: user._id!, memberName: user.name },
-    });
+  initials(name: string): string {
+    return name.split(/\s+/).map((p) => p[0]).slice(0, 2).join('').toUpperCase();
   }
 
   openAddModal(): void {
     if (!this.canEdit) return;
-
     const dialogRef = this.dialog.open(MemberFormComponent, {
       width: '500px',
-      data: { defaultRole: this.currentRoleFilter || 'member' },
+      data: { defaultRole: this.currentRoleFilter || 'Member' },
     });
-
     dialogRef.afterClosed().subscribe((updated) => {
-      if (updated) {
-        this.loadUsers();
-      }
+      if (updated) this.loadUsers();
     });
   }
 
   openEditModal(user: User): void {
     if (!this.canEdit) return;
-
     const dialogRef = this.dialog.open(MemberFormComponent, {
       width: '500px',
       data: { user: { ...user } },
     });
-
     dialogRef.afterClosed().subscribe((updated) => {
-      if (updated) {
-        this.loadUsers();
-      }
+      if (updated) this.loadUsers();
     });
   }
 

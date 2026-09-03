@@ -20,7 +20,7 @@
       class="sidebar__link"
       [routerLink]="item.route"
       routerLinkActive="is-active"
-      [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }"
+      [routerLinkActiveOptions]="{ exact: true }"
       (click)="navigate.emit()"
     >
 

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { navForRole } from '../../core/nav/nav-items';
 
 @Component({
   selector: 'app-login',
@@ -31,17 +32,10 @@ export class LoginComponent {
 
     this.auth.login(email!, password!).subscribe({
       next: () => {
-        const role = this.auth.role;
-
-        if (role === 'Admin') {
-          this.router.navigate(['/dashboard/admin']);
-        } else if (role === 'Trainer') {
-          this.router.navigate(['/dashboard/trainer']);
-        } else if (role === 'Member') {
-          this.router.navigate(['/dashboard/member']);
-        } else {
-          this.router.navigate(['/dashboard']);
-        }
+        // Land on whichever sidebar item is first for this role, so login always
+        // matches what the menu actually shows instead of a hardcoded route.
+        const items = navForRole(this.auth.role);
+        this.router.navigate([items.length ? items[0].route : '/workouts']);
       },
       error: () => (this.loading = false),
     });

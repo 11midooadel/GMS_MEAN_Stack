@@ -1,2 +1,11 @@
 .mf { width: 420px; max-width: 80vw; }
 .mf__field { width: 100%; }
+
+.mf__cancel {
+  color: var(--gms-text-muted);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+.mf__cancel:hover {
+  background-color: var(--gms-card-soft);
+  color: var(--gms-text);
+}

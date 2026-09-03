@@ -45,12 +45,12 @@ export const NAV_ITEMS: NavItem[] = [
   { label: 'Workout Plans', icon: 'assignment', route: '/workouts',
     roles: ['Super Admin', 'Admin', 'Member', 'Trainer'] },
 
-  // 6. Attendance
+  // 6. Health Records
   {
-    label: 'Attendance',
-    icon: 'how_to_reg',
-    route: '/attendance',
-    roles: ['Super Admin', 'super_admin', 'Admin', 'admin', 'Member', 'member', 'Trainer', 'trainer']
+    label: 'Health Records',
+    icon: 'monitor_heart',
+    route: '/health',
+    roles: ['Super Admin', 'super_admin', 'Admin', 'admin', 'Member', 'member']
   },
 
   // 7. Membership Plans
@@ -77,12 +77,12 @@ export const NAV_ITEMS: NavItem[] = [
     roles: ['Super Admin', 'super_admin', 'Admin', 'admin']
   },
 
-  // 10. Health Records
+  // 10. Attendance
   {
-    label: 'Health Records',
-    icon: 'monitor_heart',
-    route: '/health',
-    roles: ['Super Admin', 'super_admin', 'Admin', 'admin', 'Member', 'member']
+    label: 'Attendance',
+    icon: 'how_to_reg',
+    route: '/attendance',
+    roles: ['Super Admin', 'super_admin', 'Admin', 'admin', 'Member', 'member', 'Trainer', 'trainer']
   },
 ];
 

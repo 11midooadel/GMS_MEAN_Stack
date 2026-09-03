@@ -3,7 +3,7 @@
     <h1 class="gms-page-title">{{ title }}</h1>
     <p class="gms-page-subtitle">{{ subtitle }}</p>
   </div>
-  <button *ngIf="isTrainer" mat-flat-button color="primary" class="gms-pill" (click)="openForm()">
+  <button *ngIf="isTrainer || isAdmin" mat-flat-button color="primary" class="gms-pill" (click)="openForm()">
     <mat-icon>add</mat-icon> New Class
   </button>
 </header>
