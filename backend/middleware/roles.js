@@ -6,10 +6,11 @@ const authorizeRoles = (...allowedRoles) => {
       });
     }
 
-    const userRole = String(req.user.role || "").toLowerCase();
+    const normalize = (role) => String(role || "").trim().toLowerCase().replace(/\s+/g, "_");
+    const userRole = normalize(req.user.role);
 
     const hasPermission = allowedRoles.some(
-      (role) => role.trim().toLowerCase() === userRole.trim().toLowerCase()
+      (role) => normalize(role) === userRole
     );
 
     if (!hasPermission) {

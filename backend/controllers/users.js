@@ -178,7 +178,7 @@ const createUser = async (req, res) => {
     await user.save();
     const result = user.toObject();
     delete result.password;
-   // res.status(201).json({ message: "User created successfully", user });
+    res.status(201).json({ message: "User created successfully", user: result });
 
 
   } catch (error) {
@@ -282,7 +282,7 @@ const updateUser = async (req, res) => {
 // 8. DELETE USER
 const deleteUser = async (req, res) => {
   try {
- const isAuthorized = isSuperOrAdmin(req.user?.role) || req.user?.userId?.toString() === req.params.id;
+    const isAuthorized = isSuperOrAdmin(req.user?.role) || req.user?.userId?.toString() === req.params.id;
 
     if (!isAuthorized) {
       return res.status(403).json({ message: 'Access denied' });
